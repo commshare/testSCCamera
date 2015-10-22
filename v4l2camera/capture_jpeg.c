@@ -20,6 +20,8 @@
 #include <jpeglib.h>
 
 #include"sc_log.h"
+
+#include"sc_sdf.h"
 bool camera_frame(camera_t* camera, struct timeval timeout) {
   fd_set fds;
   FD_ZERO(&fds);
@@ -29,6 +31,153 @@ bool camera_frame(camera_t* camera, struct timeval timeout) {
   if (r == 0) return false;
 //  LOGD("capture one yuv");
   return camera_capture(camera);
+}
+
+
+
+
+//read a frame from the opened camera device
+int read_frame_from_camera(camera_t *cam, uint8 *frame_buf, int *frame_length)
+{
+	struct v4l2_buffer buf;
+	CLEAR(buf);
+	buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+	buf.memory = V4L2_MEMORY_MMAP;
+
+	if (-1 == ioctl(cam->fd, VIDIOC_DQBUF, &buf))
+	{
+		switch(errno)
+		{
+		case EAGAIN:
+			return 0;
+		case EIO:
+		default:
+			printf("read frame from camera wrong\n");
+			return -1;//BASICERROR;
+		}
+	}
+
+	memcpy(frame_buf, cam->buffers[buf.index].start, cam->buffers[buf.index].length);
+	*frame_length = cam->buffers[buf.index].length;
+
+	if (-1 == ioctl(cam->fd, VIDIOC_QBUF, &buf))
+	{
+		printf("read frame frame camera put buf into the frame queue error");
+		return -1;//BASICERROR;
+	}
+
+	return 0;//SUCCESS;
+}
+
+
+
+//file write
+int file_write(uint8 *src, int length, FILE *fd)
+{
+	int ret_status = BASICERROR;
+
+	do{
+		//check parameter
+		if (fd == NULL)
+		{
+			printf("wrong file operator in file write function\n");
+			ret_status = PARAMERROR;
+			break;
+		}
+
+		if (NULL == src || length < 1)
+		{
+			printf("wrong source input into file write function\n");
+			ret_status = PARAMERROR;
+			break;
+		}
+
+		//write to file
+		if (0 == fwrite(src, length, 1, fd))
+		{
+			printf("write file wrong\n");
+			ret_status = FILEERROR;
+			break;
+		}
+
+		ret_status = SUCCESS;
+	}while (0);
+
+	return ret_status;
+}
+
+//save YUV format video
+int	yuv_write(uint8 *src, int length,FILE *yuv_fd)
+{
+	return file_write(src, length, yuv_fd);
+}
+
+int get_and_compress_pic(camera_t *cam,FILE* fp,int width,int height,int bpp)
+{
+	int count = 1;
+	fd_set fds;
+	struct timeval tv;
+	int	ret;
+	int length=0;
+	uint8 *pic;
+	uint8 *pic_out;
+	int out_length=0;
+
+    int pic_size=width * height * bpp;
+	pic = (int8 *)malloc(pic_size);
+	if (NULL == pic)
+	{
+		printf("can't get enough memory in main function\n");
+		exit(EXIT_FAILURE);
+	}
+
+	pic_out = (int8 *)malloc(pic_size);
+	if (NULL == pic_out)
+	{
+		printf("can't get enough memory in main function\n");
+		exit(EXIT_FAILURE);
+	}
+
+	while(!cam->stopcap_flag)
+	{
+		length = 0;
+		out_length = 0;
+		memset(pic, 0, pic_size);
+		memset(pic_out, 0, pic_size);
+		printf("\n\n this is the %d th frame\n", count);
+		if (count++ > 100)
+		{
+			printf("exit\n");
+			break; /*一个breadk应该就可以调成while吧*/
+		}
+
+		FD_ZERO(&fds);
+		FD_SET(cam->fd, &fds);
+
+		tv.tv_sec = 2;
+		tv.tv_usec = 0;
+
+		ret = select(cam->fd + 1, &fds, NULL, NULL, &tv);
+
+		switch(ret)
+		{
+		case -1:
+			break;
+		case 0:
+			printf("time out \n");
+			break;
+		default:
+			read_frame_from_camera(cam, pic, &length);
+			yuv_write(pic, length,fp);
+
+			if (pic[0] == '\0')
+			{
+				break;
+			}
+		//	out_length = compress_frame(-1, pic, pic_out);
+		//	h264_write(pic_out, out_length);
+		}
+	}
 }
 
 
@@ -67,12 +216,14 @@ jpeg(FILE* dest, uint8_t* rgb, uint32_t width, uint32_t height, int quality)
   free(image);
 }
 #define OUT_JPEG 1
+#define SC_WIDTH 640
+#define SC_HEIGHT 480
 
 int main(int argc, char* argv[])
 {
   char* device = argc > 1 ? argv[1] : "/dev/video0";
-  uint32_t width = argc > 2 ? atoi(argv[2]) : 352;
-  uint32_t height = argc > 3 ? atoi(argv[3]) : 288;
+  uint32_t width = argc > 2 ? atoi(argv[2]) : SC_WIDTH;
+  uint32_t height = argc > 3 ? atoi(argv[3]) : SC_HEIGHT;
   char* output = argc > 4 ? argv[4] : "result.jpg";
 
   FILE *fpyuv;
@@ -88,6 +239,7 @@ int main(int argc, char* argv[])
     fprintf(stderr, "[%s] %s\n", device, strerror(errno));
     return EXIT_FAILURE;
   }
+  LOGD("config with width[%d] height[%d]",width,height);
   camera_format_t config = {0, width, height, {0, 0}};
   if (!camera_config_set(camera, &config)) goto error;
   if (!camera_start(camera)) goto error;
@@ -104,9 +256,31 @@ int main(int argc, char* argv[])
 
 
 #if OUT_JPEG
-LOGD("out a jpeg");
+LOGD("out a jpeg w[%d] h[%d]",camera->width, camera->height);
   /*视频帧导出*/
   camera_frame(camera, timeout);
+  FILE *oneyuv=fopen("one422.yuv","w");
+  if(oneyuv!=NULL)
+  {
+  	LOGD("write len[%d] yuv to file",camera->head.length);
+    fwrite(camera->head.start,camera->head.length,1,oneyuv);
+    char *onejpegname="onejpeg.jpg";
+    FILE *onejpeg=fopen(onejpegname,"w");
+	if(onejpeg!=NULL){
+		uint8_t *outrgb=(uint8_t *)malloc(camera->head.length);
+		int ret=fread(outrgb,camera->head.length,1,oneyuv);
+		LOGD("after fread from oneyuv to outrgb ,return[%d]",ret);
+		unsigned char* onergb =yuyv2rgb(outrgb, camera->width, camera->height);
+        jpeg(onejpeg,outrgb, camera->width, camera->height, 90);
+
+		 free(outrgb);
+		 fclose(onejpeg);
+	}else
+	   LOGD("onejpeg fopen fail");
+	fclose(oneyuv);
+
+  }else
+  	LOGD("fopen oneyuv fail");
   /*YUYV转为rgb*/
   unsigned char* rgb =
     yuyv2rgb(camera->head.start, camera->width, camera->height);
@@ -114,12 +288,17 @@ LOGD("out a jpeg");
   /*jpeg是对rgb编码么?*/
   jpeg(out, rgb, camera->width, camera->height, 100);
  #endif
+
+ #if 0
  LOGD("write 100 yuv422 to file");
   for(i=0;i<100;i++)
  {
     camera_frame(camera, timeout);
  	fwrite(camera->head.start,camera->head.length,1,fpyuv);
   }
+  #else
+  // get_and_compress_pic(camera,fpyuv,width,height,2);
+  #endif
 
 
  #if OUT_JPEG

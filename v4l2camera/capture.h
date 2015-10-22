@@ -46,6 +46,7 @@ typedef struct {
   camera_buffer_t* buffers;
   camera_buffer_t head;
   camera_context_t context;
+  int stopcap_flag;//add by me
 } camera_t; /*camera¿‡*/
 
 camera_t* camera_open(const char * device);
