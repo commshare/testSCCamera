@@ -26,6 +26,7 @@ bool camera_frame(camera_t* camera, struct timeval timeout) {
   fd_set fds;
   FD_ZERO(&fds);
   FD_SET(camera->fd, &fds);
+  /*一旦有数据来就会写入，所以head可能会被覆盖掉*/
   int r = select(camera->fd + 1, &fds, 0, 0, &timeout);
   if (r == -1) exit(EXIT_FAILURE);
   if (r == 0) return false;
@@ -259,21 +260,25 @@ int main(int argc, char* argv[])
 LOGD("out a jpeg w[%d] h[%d]",camera->width, camera->height);
   /*视频帧导出*/
   camera_frame(camera, timeout);
-  FILE *oneyuv=fopen("one422.yuv","w");
+  FILE *oneyuv=fopen("one422.yuv","rw");
   if(oneyuv!=NULL)
   {
-  	LOGD("write len[%d] yuv to file",camera->head.length);
-    fwrite(camera->head.start,camera->head.length,1,oneyuv);
+  	int ilen=camera->head.length;
+  	LOGD("write len[%d] yuv to file",ilen);
+    int r=fwrite(camera->head.start,ilen,1,oneyuv);
+	LOGD("fwrite to yuv ,ret[%d]",r);
+
     char *onejpegname="onejpeg.jpg";
     FILE *onejpeg=fopen(onejpegname,"w");
 	if(onejpeg!=NULL){
-		uint8_t *outrgb=(uint8_t *)malloc(camera->head.length);
-		int ret=fread(outrgb,camera->head.length,1,oneyuv);
+		uint8_t *outbuf=(uint8_t *)malloc(ilen*sizeof(uint8_t));
+		int ret=fread(outbuf,ilen,1,oneyuv);
 		LOGD("after fread from oneyuv to outrgb ,return[%d]",ret);
-		unsigned char* onergb =yuyv2rgb(outrgb, camera->width, camera->height);
-        jpeg(onejpeg,outrgb, camera->width, camera->height, 90);
+		uint8_t * onergb =yuyv2rgb(outbuf, camera->width, camera->height);
+        jpeg(onejpeg,onergb, camera->width, camera->height, 90);
 
-		 free(outrgb);
+		 free(outbuf);
+		 free(onergb);
 		 fclose(onejpeg);
 	}else
 	   LOGD("onejpeg fopen fail");
