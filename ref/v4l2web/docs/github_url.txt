@@ -1,0 +1,18 @@
+[root@c7 v4l2web]# cat .git/config
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = git@github.com:mpromonet/v4l2web.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[submodule "v4l2web/mongoose"]
+	url = https://github.com/cesanta/mongoose.git
+[submodule "v4l2wrapper"]
+	url = https://github.com/mpromonet/v4l2wrapper
+[root@c7 v4l2web]# 
+

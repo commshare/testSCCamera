@@ -1,0 +1,40 @@
+root@debian-armhf v4l2web # libjsoncpp0_0.6.0~rc2-3_armhf.deb^C
+root@debian-armhf v4l2web # apt-get install libjsoncpp-dev
+正在读取软件包列表... 完成
+正在分析软件包的依赖关系树       
+正在读取状态信息... 完成       
+将会安装下列额外的软件包：
+  libjsoncpp0
+  下列【新】软件包将被安装：
+    libjsoncpp-dev libjsoncpp0
+    升级了 0 个软件包，新安装了 2 个软件包，要卸载 0 个软件包，有 20 个软件包未被升级。
+    需要下载 464 kB 的软件包。
+    解压缩后会消耗掉 2,827 kB 的额外空间。
+    您希望继续执行吗？[Y/n]y
+    错误 http://ftp.cn.debian.org/debian/ wheezy/main libjsoncpp0 armhf 0.6.0~rc2-3
+      连接失败 [IP: 202.141.176.110 80]
+      错误 http://ftp.cn.debian.org/debian/ wheezy/main libjsoncpp-dev armhf 0.6.0~rc2-3
+        连接失败 [IP: 202.141.176.110 80]
+        无法下载 http://ftp.cn.debian.org/debian/pool/main/libj/libjsoncpp/libjsoncpp0_0.6.0~rc2-3_armhf.deb  连接失败 [IP: 202.141.176.110 80]
+        无法下载 http://ftp.cn.debian.org/debian/pool/main/libj/libjsoncpp/libjsoncpp-dev_0.6.0~rc2-3_armhf.deb  连接失败 [IP: 202.141.176.110 80]
+        E: 有几个软件包无法下载，您可以运行 apt-get update 或者加上 --fix-missing 的选项再试试？
+        root@debian-armhf v4l2web # dpkg -i *.deb
+        dpkg: error processing *.deb (--install):
+             无法访问归档文件: 没有那个文件或目录
+             在处理时有错误发生：
+              *.deb
+              root@debian-armhf v4l2web # ls
+              angularjs  emberjs  Makefile  mongoose.o  README.md  v4l2wrapper
+              docs       inc      mongoose  reactjs     src        webroot
+              root@debian-armhf v4l2web # cd docs
+              root@debian-armhf docs # dpkg -i libjsoncpp
+              libjsoncpp0_0.6.0~rc2-3_armhf.deb     libjsoncpp-dev_0.6.0~rc2-3_armhf.deb
+              root@debian-armhf docs # dpkg -i libjsoncpp*
+              Selecting previously unselected package libjsoncpp0.
+              (正在读取数据库 ... 系统当前共安装有 39164 个文件和目录。)
+              正在解压缩 libjsoncpp0 (从 libjsoncpp0_0.6.0~rc2-3_armhf.deb) ...
+              Selecting previously unselected package libjsoncpp-dev.
+              正在解压缩 libjsoncpp-dev (从 libjsoncpp-dev_0.6.0~rc2-3_armhf.deb) ...
+              正在设置 libjsoncpp0 (0.6.0~rc2-3) ...
+              正在设置 libjsoncpp-dev (0.6.0~rc2-3) ...
+              root@debian-armhf docs # 

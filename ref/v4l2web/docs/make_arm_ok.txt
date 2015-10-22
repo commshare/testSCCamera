@@ -1,0 +1,14 @@
+root@debian-armhf mongoose # ls
+docs  examples  jni  LICENSE  mongoose.c  mongoose.h  README.md  scripts  test
+root@debian-armhf mongoose # cd ..
+root@debian-armhf v4l2web # make
+g++ -o mongoose.o -c mongoose/mongoose.c
+g++ -o v4l2web -W -Wall -pthread -g -pipe  -I /usr/include/jsoncpp  -g -fpermissive -I mongoose -I v4l2wrapper/inc -I inc src/main.cpp src/v4l2web.cpp mongoose.o v4l2wrapper/libv4l2wrapper.a -ljsoncpp  -llog4cpp  -lv4l2 -ljpeg
+src/v4l2web.cpp: In function ‘unsigned int add_ctrl(int, unsigned int, Json::Value&)’:
+    src/v4l2web.cpp:72:57: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+    root@debian-armhf v4l2web # ls
+    angularjs  emberjs  Makefile  mongoose.o  README.md  v4l2web      webroot
+    docs       inc      mongoose  reactjs     src        v4l2wrapper
+    root@debian-armhf v4l2web # file v4l2web
+    v4l2web: ELF 32-bit LSB executable, ARM, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.26, BuildID[sha1]=0x57881a76a8b2c5a8ed0e06adb6100e99c879733f, not stripped
+    root@debian-armhf v4l2web # 
