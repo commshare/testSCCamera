@@ -24,6 +24,7 @@ int main(int argc, char* argv[])
 
   char name[5];
   camera_format_t format;
+  //获取支持的格式
   camera_config_get(camera, &format);
   camera_format_name(format.format, name);
   puts("[current config]");

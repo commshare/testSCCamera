@@ -19,6 +19,7 @@
 
 #include <jpeglib.h>
 
+#include"sc_log.h"
 bool camera_frame(camera_t* camera, struct timeval timeout) {
   fd_set fds;
   FD_ZERO(&fds);
@@ -26,6 +27,7 @@ bool camera_frame(camera_t* camera, struct timeval timeout) {
   int r = select(camera->fd + 1, &fds, 0, 0, &timeout);
   if (r == -1) exit(EXIT_FAILURE);
   if (r == 0) return false;
+//  LOGD("capture one yuv");
   return camera_capture(camera);
 }
 
@@ -64,6 +66,7 @@ jpeg(FILE* dest, uint8_t* rgb, uint32_t width, uint32_t height, int quality)
   }
   free(image);
 }
+#define OUT_JPEG 1
 
 int main(int argc, char* argv[])
 {
@@ -71,6 +74,14 @@ int main(int argc, char* argv[])
   uint32_t width = argc > 2 ? atoi(argv[2]) : 352;
   uint32_t height = argc > 3 ? atoi(argv[3]) : 288;
   char* output = argc > 4 ? argv[4] : "result.jpg";
+
+  FILE *fpyuv;
+  char *yuv_file="zb.yuv";
+  fpyuv=fopen(yuv_file,"w");
+  if(fpyuv==NULL){
+	LOGD("fopen yuvfile[%s] fail [%s]",yuv_file,strerror(errno));
+	return -1;
+  }
 
   camera_t* camera = camera_open(device);
   if (!camera) {
@@ -84,18 +95,39 @@ int main(int argc, char* argv[])
   struct timeval timeout;
   timeout.tv_sec = 1;
   timeout.tv_usec = 0;
+  int i;
   /* skip 5 frames for booting a cam */
-  for (int i = 0; i < 5; i++) {
+  for ( i = 0; i < 5; i++) {
+  	LOGD("skip");
     camera_frame(camera, timeout);
   }
-  camera_frame(camera, timeout);
 
+
+#if OUT_JPEG
+LOGD("out a jpeg");
+  /*视频帧导出*/
+  camera_frame(camera, timeout);
+  /*YUYV转为rgb*/
   unsigned char* rgb =
     yuyv2rgb(camera->head.start, camera->width, camera->height);
   FILE* out = fopen(output, "w");
+  /*jpeg是对rgb编码么?*/
   jpeg(out, rgb, camera->width, camera->height, 100);
+ #endif
+ LOGD("write 100 yuv422 to file");
+  for(i=0;i<100;i++)
+ {
+    camera_frame(camera, timeout);
+ 	fwrite(camera->head.start,camera->head.length,1,fpyuv);
+  }
+
+
+ #if OUT_JPEG
   fclose(out);
   free(rgb);
+ #endif
+  fclose(fpyuv);
+  fpyuv=NULL;
 
   camera_stop(camera);
   camera_close(camera);

@@ -227,6 +227,7 @@ bool camera_capture(camera_t* camera)
   buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   buf.memory = V4L2_MEMORY_MMAP;
   if (xioctl(camera->fd, VIDIOC_DQBUF, &buf) == -1) return false;
+  /*ÄÚ´æµ¼³ö*/
   memcpy(camera->head.start, camera->buffers[buf.index].start, buf.bytesused);
   camera->head.length = buf.bytesused;
   if (xioctl(camera->fd, VIDIOC_QBUF, &buf) == -1) return false;

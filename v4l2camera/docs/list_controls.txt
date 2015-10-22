@@ -1,0 +1,139 @@
+[Brightness]
+- id: 9963776
+- type: INTEGER
+- value: 128
+- range: 0 <- 128 -> 255 (step: 1)
+- flags
+    - disabled: false
+    - grabbed: false
+    - read only: false
+    - update: false
+    - inactive: false
+    - slider: false
+    - write_only: false
+    - volatile: false
+
+[Contrast]
+- id: 9963777
+- type: INTEGER
+- value: 32
+- range: 0 <- 32 -> 255 (step: 1)
+- flags
+    - disabled: false
+    - grabbed: false
+    - read only: false
+    - update: false
+    - inactive: false
+    - slider: false
+    - write_only: false
+    - volatile: false
+
+[Saturation]
+- id: 9963778
+- type: INTEGER
+- value: 32
+- range: 0 <- 32 -> 255 (step: 1)
+- flags
+    - disabled: false
+    - grabbed: false
+    - read only: false
+    - update: false
+    - inactive: false
+    - slider: false
+    - write_only: false
+    - volatile: false
+
+[White Balance Temperature, Auto]
+- id: 9963788
+- type: BOOLEAN
+- value: 1
+- range: 0 <- 1 -> 1 (step: 1)
+- flags
+    - disabled: false
+    - grabbed: false
+    - read only: false
+    - update: false
+    - inactive: false
+    - slider: false
+    - write_only: false
+    - volatile: false
+
+[Gain]
+- id: 9963795
+- type: INTEGER
+- value: 64
+- range: 0 <- 64 -> 255 (step: 1)
+- flags
+    - disabled: false
+    - grabbed: false
+    - read only: false
+    - update: false
+    - inactive: false
+    - slider: false
+    - write_only: false
+    - volatile: false
+
+[Power Line Frequency]
+- id: 9963800
+- type: MENU
+- value: 2
+- range: 0 <- 2 -> 2 (step: 1)
+- menus
+    - 0: [Disabled]
+    - 1: [50 Hz]
+    - 2: [60 Hz]
+- flags
+    - disabled: false
+    - grabbed: false
+    - read only: false
+    - update: false
+    - inactive: false
+    - slider: false
+    - write_only: false
+    - volatile: false
+
+[White Balance Temperature]
+- id: 9963802
+- type: INTEGER
+- value: 4000
+- range: 0 <- 4000 -> 10000 (step: 10)
+- flags
+    - disabled: false
+    - grabbed: false
+    - read only: false
+    - update: false
+    - inactive: false
+    - slider: false
+    - write_only: false
+    - volatile: false
+
+[Sharpness]
+- id: 9963803
+- type: INTEGER
+- value: 24
+- range: 0 <- 24 -> 255 (step: 1)
+- flags
+    - disabled: false
+    - grabbed: false
+    - read only: false
+    - update: false
+    - inactive: false
+    - slider: false
+    - write_only: false
+    - volatile: false
+
+[Backlight Compensation]
+- id: 9963804
+- type: INTEGER
+- value: 0
+- range: 0 <- 0 -> 1 (step: 1)
+- flags
+    - disabled: false
+    - grabbed: false
+    - read only: false
+    - update: false
+    - inactive: false
+    - slider: false
+    - write_only: false
+    - volatile: false
+
