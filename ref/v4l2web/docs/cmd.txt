@@ -1,0 +1,1 @@
+./v4l2web  -vv -P 8033  -W 640 -H 480 -F 15 /dev/video0

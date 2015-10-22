@@ -1,0 +1,616 @@
+
+root@debian-armhf v4l2web # ./v4l2web      -v v       -P 8033    -W 640    -H 480     -F 15  
+2015-10-22 14:31:32,380 [INFO  ] - v4l2wrapper/inc/logger.h:44
+        level:INFO
+2015-10-22 14:31:32,382 [ERROR ] - src/V4l2Capture.cpp:53
+        Cannot open device:v No such file or directory
+2015-10-22 14:31:32,382 [ERROR ] - src/V4l2Capture.cpp:42
+        Cannot init device:v
+2015-10-22 14:31:32,383 [INFO  ] - src/main.cpp:214
+        Cannot create JPEG capture for device:v => try YUYV capture
+2015-10-22 14:31:32,383 [ERROR ] - src/V4l2Capture.cpp:53
+        Cannot open device:v No such file or directory
+2015-10-22 14:31:32,383 [ERROR ] - src/V4l2Capture.cpp:42
+        Cannot init device:v
+2015-10-22 14:31:32,383 [INFO  ] - src/main.cpp:220
+        Cannot create YUYV capture for device:v => try YUYV capture
+2015-10-22 14:31:32,383 [ERROR ] - src/V4l2Capture.cpp:53
+        Cannot open device:v No such file or directory
+2015-10-22 14:31:32,383 [ERROR ] - src/V4l2Capture.cpp:42
+        Cannot init device:v
+2015-10-22 14:31:32,383 [WARN  ] - src/main.cpp:227
+        Cannot create V4L2 capture interface for device:v
+root@debian-armhf v4l2web # 
+root@debian-armhf v4l2web # ./v4l2web  -v v -P 8033  -W 640 -H 480 -F 15 /dev/video0
+2015-10-22 14:32:25,916 [INFO  ] - v4l2wrapper/inc/logger.h:44
+        level:INFO
+2015-10-22 14:32:25,917 [ERROR ] - src/V4l2Capture.cpp:53
+        Cannot open device:v No such file or directory
+2015-10-22 14:32:25,917 [ERROR ] - src/V4l2Capture.cpp:42
+        Cannot init device:v
+2015-10-22 14:32:25,918 [INFO  ] - src/main.cpp:214
+        Cannot create JPEG capture for device:v => try YUYV capture
+2015-10-22 14:32:25,918 [ERROR ] - src/V4l2Capture.cpp:53
+        Cannot open device:v No such file or directory
+2015-10-22 14:32:25,918 [ERROR ] - src/V4l2Capture.cpp:42
+        Cannot init device:v
+2015-10-22 14:32:25,918 [INFO  ] - src/main.cpp:220
+        Cannot create YUYV capture for device:v => try YUYV capture
+2015-10-22 14:32:25,918 [ERROR ] - src/V4l2Capture.cpp:53
+        Cannot open device:v No such file or directory
+2015-10-22 14:32:25,918 [ERROR ] - src/V4l2Capture.cpp:42
+        Cannot init device:v
+2015-10-22 14:32:25,918 [WARN  ] - src/main.cpp:227
+        Cannot create V4L2 capture interface for device:v
+root@debian-armhf v4l2web # ls /dev/video0
+/dev/video0
+root@debian-armhf v4l2web # ./v4l2web  -vv -P 8033  -W 640 -H 480 -F 15 /dev/video0
+2015-10-22 14:33:22,231 [INFO  ] - v4l2wrapper/inc/logger.h:44
+        level:DEBUG
+2015-10-22 14:33:22,234 [NOTICE] - src/V4l2Capture.cpp:86
+        driver:uvcvideo 5000001
+2015-10-22 14:33:22,234 [NOTICE] - src/V4l2Capture.cpp:94
+        /dev/video0 support read/write
+2015-10-22 14:33:22,234 [NOTICE] - src/V4l2Capture.cpp:95
+        /dev/video0 support streaming
+2015-10-22 14:33:22,234 [ERROR ] - src/V4l2Capture.cpp:135
+        Cannot set format for device:/dev/video0 Invalid argument
+2015-10-22 14:33:22,234 [ERROR ] - src/V4l2Capture.cpp:42
+        Cannot init device:/dev/video0
+2015-10-22 14:33:22,235 [INFO  ] - src/main.cpp:214
+        Cannot create JPEG capture for device:/dev/video0 => try YUYV capture
+2015-10-22 14:33:22,236 [NOTICE] - src/V4l2Capture.cpp:86
+        driver:uvcvideo 5000001
+2015-10-22 14:33:22,236 [NOTICE] - src/V4l2Capture.cpp:94
+        /dev/video0 support read/write
+2015-10-22 14:33:22,236 [NOTICE] - src/V4l2Capture.cpp:95
+        /dev/video0 support streaming
+2015-10-22 14:33:22,287 [NOTICE] - src/V4l2Capture.cpp:153
+        /dev/video0:YUYV size:640x480 bufferSize:614400
+2015-10-22 14:33:22,336 [NOTICE] - src/V4l2Capture.cpp:172
+        fps:1/15
+2015-10-22 14:33:22,337 [NOTICE] - src/V4l2Capture.cpp:173
+        nbBuffer:0
+2015-10-22 14:33:22,343 [NOTICE] - src/main.cpp:244
+        Started on port:8033 webroot:/home/sccamfb/ref/v4l2web/webroot
+{
+   "capabilities" : [ "V4L2_CAP_TIMEPERFRAME" ],
+   "capturemode" : null,
+   "format" : "YUYV",
+   "fps" : 15.0,
+   "height" : 480,
+   "readbuffers" : 0,
+   "sizeimage" : 614400,
+   "width" : 640
+}
+
+{
+   "capabilities" : [ "V4L2_CAP_TIMEPERFRAME" ],
+   "capturemode" : null,
+   "format" : "YUYV",
+   "fps" : 15.0,
+   "height" : 480,
+   "readbuffers" : 0,
+   "sizeimage" : 614400,
+   "width" : 640
+}
+
+2015-10-22 14:34:32,691 [DEBUG ] - src/main.cpp:136
+        read size:-1 buffersize:614400
+2015-10-22 14:34:33,239 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:33,352 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131749
+2015-10-22 14:34:33,358 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:33,468 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129981
+2015-10-22 14:34:33,475 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:33,585 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130383
+2015-10-22 14:34:33,594 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:33,705 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130663
+2015-10-22 14:34:33,713 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:33,820 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130431
+2015-10-22 14:34:33,829 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:33,939 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130690
+2015-10-22 14:34:33,948 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:34,056 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130707
+2015-10-22 14:34:34,065 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:34,174 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131498
+2015-10-22 14:34:34,184 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:34,290 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131184
+2015-10-22 14:34:34,301 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:34,410 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131160
+2015-10-22 14:34:34,420 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:34,528 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131844
+2015-10-22 14:34:34,544 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:34,653 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131864
+2015-10-22 14:34:34,665 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:34,774 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131546
+2015-10-22 14:34:34,786 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:34,894 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:132003
+2015-10-22 14:34:34,907 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:35,017 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:132369
+2015-10-22 14:34:35,029 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:35,138 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:132333
+2015-10-22 14:34:35,152 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:35,260 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131906
+2015-10-22 14:34:35,274 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:35,383 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:132208
+2015-10-22 14:34:35,397 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:35,505 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:132251
+2015-10-22 14:34:35,520 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:35,627 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:132887
+2015-10-22 14:34:35,642 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:35,753 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:133598
+2015-10-22 14:34:35,769 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:35,878 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:134216
+2015-10-22 14:34:35,894 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:36,003 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:133882
+2015-10-22 14:34:36,019 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:36,129 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:134181
+2015-10-22 14:34:36,145 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:36,254 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:133794
+2015-10-22 14:34:36,271 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:36,380 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:133462
+2015-10-22 14:34:36,397 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:36,505 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:133373
+2015-10-22 14:34:36,523 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:36,632 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:133474
+2015-10-22 14:34:36,651 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:36,760 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:133742
+2015-10-22 14:34:36,779 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:36,888 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:133215
+2015-10-22 14:34:36,907 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:37,016 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131961
+2015-10-22 14:34:37,035 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:37,144 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:132817
+2015-10-22 14:34:37,163 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:37,272 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:132508
+2015-10-22 14:34:37,290 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:37,399 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131947
+2015-10-22 14:34:37,421 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:37,530 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131690
+2015-10-22 14:34:37,551 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:37,659 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:132007
+2015-10-22 14:34:37,681 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:37,789 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131547
+2015-10-22 14:34:37,810 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:37,918 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131349
+2015-10-22 14:34:37,940 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:38,046 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130651
+2015-10-22 14:34:38,068 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:38,173 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:128800
+2015-10-22 14:34:38,195 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:38,303 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129229
+2015-10-22 14:34:38,327 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:38,434 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129242
+2015-10-22 14:34:38,457 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:38,564 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129151
+2015-10-22 14:34:38,588 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:38,695 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129240
+2015-10-22 14:34:38,718 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:38,826 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129380
+2015-10-22 14:34:38,851 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:38,959 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129280
+2015-10-22 14:34:38,985 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:39,092 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129611
+2015-10-22 14:34:39,117 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:39,224 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129227
+2015-10-22 14:34:39,249 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:39,357 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129388
+2015-10-22 14:34:39,381 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:39,488 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:128944
+2015-10-22 14:34:39,512 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:39,619 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:128988
+2015-10-22 14:34:39,644 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:39,751 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129016
+2015-10-22 14:34:39,775 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:39,882 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:128988
+2015-10-22 14:34:39,906 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:40,013 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129398
+2015-10-22 14:34:40,037 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:40,144 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129885
+2015-10-22 14:34:40,167 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:40,273 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130590
+2015-10-22 14:34:40,288 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:40,393 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130716
+2015-10-22 14:34:40,408 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:40,516 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130841
+2015-10-22 14:34:40,530 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:40,637 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130612
+2015-10-22 14:34:40,651 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:40,759 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130503
+2015-10-22 14:34:40,772 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:40,878 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130178
+2015-10-22 14:34:40,893 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:40,998 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130326
+2015-10-22 14:34:41,013 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:41,121 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130654
+2015-10-22 14:34:41,135 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:41,242 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130962
+2015-10-22 14:34:41,256 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:41,363 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130894
+2015-10-22 14:34:41,377 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:41,484 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130435
+2015-10-22 14:34:41,498 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:41,603 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130644
+2015-10-22 14:34:41,618 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:41,726 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130716
+2015-10-22 14:34:41,740 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:41,847 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130855
+2015-10-22 14:34:41,861 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:41,969 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130961
+2015-10-22 14:34:41,983 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:42,090 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130687
+2015-10-22 14:34:42,104 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:42,210 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131253
+2015-10-22 14:34:42,225 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:42,334 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130867
+2015-10-22 14:34:42,347 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:42,456 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131191
+2015-10-22 14:34:42,469 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:42,578 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131738
+2015-10-22 14:34:42,592 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:42,701 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131426
+2015-10-22 14:34:42,715 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:42,822 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131288
+2015-10-22 14:34:42,837 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:42,943 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131079
+2015-10-22 14:34:42,958 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:43,067 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130946
+2015-10-22 14:34:43,081 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:43,189 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131332
+2015-10-22 14:34:43,203 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:43,311 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131053
+2015-10-22 14:34:43,325 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:43,431 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130818
+2015-10-22 14:34:43,445 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:43,551 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131032
+2015-10-22 14:34:43,566 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:43,675 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131233
+2015-10-22 14:34:43,689 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:43,797 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130892
+2015-10-22 14:34:43,810 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:43,918 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130822
+2015-10-22 14:34:43,932 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:44,038 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130597
+2015-10-22 14:34:44,053 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:44,158 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130301
+2015-10-22 14:34:44,173 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:44,281 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:130571
+2015-10-22 14:34:44,295 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:44,403 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131204
+2015-10-22 14:34:44,417 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:44,525 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131367
+2015-10-22 14:34:44,539 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:44,648 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131166
+2015-10-22 14:34:44,661 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:44,769 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131384
+2015-10-22 14:34:44,784 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:44,890 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:132976
+2015-10-22 14:34:44,905 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:45,016 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:135080
+2015-10-22 14:34:45,030 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:45,140 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:136796
+2015-10-22 14:34:45,154 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:45,263 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:136400
+2015-10-22 14:34:45,277 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:45,387 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:135116
+2015-10-22 14:34:45,401 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:45,509 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:134871
+2015-10-22 14:34:45,524 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:45,632 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:134125
+2015-10-22 14:34:45,646 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:45,757 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:134164
+2015-10-22 14:34:45,771 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:45,880 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:133545
+2015-10-22 14:34:45,894 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:46,003 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:133469
+2015-10-22 14:34:46,017 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:46,126 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:133204
+2015-10-22 14:34:46,140 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:46,248 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:133259
+2015-10-22 14:34:46,263 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:46,370 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:133216
+2015-10-22 14:34:46,385 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:46,495 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:132107
+2015-10-22 14:34:46,508 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:46,617 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:131948
+2015-10-22 14:34:46,631 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:46,741 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:134286
+2015-10-22 14:34:46,755 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:46,864 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:136235
+2015-10-22 14:34:46,878 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:46,986 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:136031
+2015-10-22 14:34:47,002 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:47,109 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:135391
+2015-10-22 14:34:47,124 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:47,234 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:136270
+2015-10-22 14:34:47,248 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:47,358 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:135917
+2015-10-22 14:34:47,372 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:47,482 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:135938
+2015-10-22 14:34:47,496 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:47,605 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:135036
+2015-10-22 14:34:47,620 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:47,729 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:136331
+2015-10-22 14:34:47,744 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:47,851 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:134657
+2015-10-22 14:34:47,866 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:47,974 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129192
+2015-10-22 14:34:47,988 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:48,094 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:127269
+2015-10-22 14:34:48,108 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:48,214 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:127278
+2015-10-22 14:34:48,228 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:48,334 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:127866
+2015-10-22 14:34:48,348 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:48,453 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:128345
+2015-10-22 14:34:48,467 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:48,574 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:128675
+2015-10-22 14:34:48,588 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:48,695 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:128966
+2015-10-22 14:34:48,708 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:48,815 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:128756
+2015-10-22 14:34:48,829 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:48,935 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:128874
+2015-10-22 14:34:48,949 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:49,054 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:129046
+2015-10-22 14:34:49,069 [DEBUG ] - src/main.cpp:136
+        read size:614400 buffersize:614400
+2015-10-22 14:34:49,178 [DEBUG ] - src/main.cpp:151
+        notify:/ws size:128776
+
