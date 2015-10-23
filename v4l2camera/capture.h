@@ -10,6 +10,9 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <linux/videodev2.h>
+#include<stdio.h>
+
+#include"sc_queue.h"
 #ifndef __V4L2_COMMON__
 #  define CAMERA_OLD_VIDEODEV2_H
 #endif
@@ -47,6 +50,8 @@ typedef struct {
   camera_buffer_t head;
   camera_context_t context;
   int stopcap_flag;//add by me
+  sc_queue_t *q;//add by me
+  FILE *fpyuv;//add by me
 } camera_t; /*camera¿‡*/
 
 camera_t* camera_open(const char * device);

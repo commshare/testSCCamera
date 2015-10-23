@@ -1,0 +1,10 @@
+gcc -o armqueueyuv capture.c capture_jpeg.c sc/sc_frame.c sc/sc_queue.c -ljpeg -lpthread -std=c99 -I. -I./sc
+capture_jpeg.c: In function ‘read_frame_from_camera’:
+    capture_jpeg.c:55:2: warning: implicit declaration of function ‘ioctl’ [-Wimplicit-function-declaration]
+    capture_jpeg.c: In function ‘main’:
+        capture_jpeg.c:417:3: warning: passing argument 3 of ‘pthread_create’ from incompatible pointer type [enabled by default]
+        /usr/include/pthread.h:225:12: note: expected ‘void * (*)(void *)’ but argument is of type ‘void (*)(struct camera_t *)’
+        capture_jpeg.c:418:3: warning: passing argument 3 of ‘pthread_create’ from incompatible pointer type [enabled by default]
+        /usr/include/pthread.h:225:12: note: expected ‘void * (*)(void *)’ but argument is of type ‘void (*)(struct camera_t *)’
+        sc/sc_frame.c: In function ‘init_frame’:
+            sc/sc_frame.c:19:8: warning: assignment from incompatible pointer type [enabled by default]

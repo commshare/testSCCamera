@@ -17,11 +17,18 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include<pthread.h>
+
 #include <jpeglib.h>
 
 #include"sc_log.h"
 
 #include"sc_sdf.h"
+
+#define OUT_JPEG 1
+#define SC_WIDTH 640
+#define SC_HEIGHT 480
+
 bool camera_frame(camera_t* camera, struct timeval timeout) {
   fd_set fds;
   FD_ZERO(&fds);
@@ -52,8 +59,8 @@ int read_frame_from_camera(camera_t *cam, uint8 *frame_buf, int *frame_length)
 		case EAGAIN:
 			return 0;
 		case EIO:
-		default:
-			printf("read frame from camera wrong\n");
+		default:/*遇到这种情况咋办*/
+			LOGD("Read frame from camera Wrong\n");
 			return -1;//BASICERROR;
 		}
 	}
@@ -125,7 +132,7 @@ int get_and_compress_pic(camera_t *cam,FILE* fp,int width,int height,int bpp)
 	int out_length=0;
 
     int pic_size=width * height * bpp;
-	pic = (int8 *)malloc(pic_size);
+	pic = (int8 *)malloc(pic_size); //内存在这里分配
 	if (NULL == pic)
 	{
 		printf("can't get enough memory in main function\n");
@@ -169,6 +176,8 @@ int get_and_compress_pic(camera_t *cam,FILE* fp,int width,int height,int bpp)
 			break;
 		default:
 			read_frame_from_camera(cam, pic, &length);
+            /*从pic拿到数据*/
+
 			yuv_write(pic, length,fp);
 
 			if (pic[0] == '\0')
@@ -178,6 +187,112 @@ int get_and_compress_pic(camera_t *cam,FILE* fp,int width,int height,int bpp)
 		//	out_length = compress_frame(-1, pic, pic_out);
 		//	h264_write(pic_out, out_length);
 		}
+	}
+}
+
+
+/*
+在 pthread_create 的第三个参数，是这么定义的:
+    void *(* _start_routine) (void *)
+*/
+
+void sc_get_frame(camera_t *cam)//,int width,int height,int bpp)
+{
+	int width=SC_WIDTH;
+	int height=SC_HEIGHT;
+	int bpp=2;
+	int count = 1;
+	fd_set fds;
+	struct timeval tv;
+	int	ret;
+	int length=0;
+	uint8 *pic;
+	uint8 *pic_out;
+	int out_length=0;
+
+    int pic_size=width * height * bpp;
+	sc_frame_t *frame=new_frame(pic_size);
+	//pic = (int8 *)malloc(pic_size); //内存在这里分配
+	//if (NULL == pic)
+	//	{
+	//	printf("can't get enough memory in main function\n");
+	//	exit(EXIT_FAILURE);
+	//}
+
+	//pic_out = (int8 *)malloc(pic_size);
+	//if (NULL == pic_out)
+	//{
+	//	printf("can't get enough memory in main function\n");
+	//	exit(EXIT_FAILURE);
+	//}
+
+	while(!cam->stopcap_flag)
+	{
+		length = 0;
+	//	out_length = 0;
+	//	memset(pic, 0, pic_size);
+	//	memset(pic_out, 0, pic_size);
+		printf("\n\n this is the %d th frame\n", count);
+		if (count++ > 100)
+		{
+			printf("exit\n");
+			break; /*一个breadk应该就可以调成while吧*/
+		}
+
+		FD_ZERO(&fds);
+		FD_SET(cam->fd, &fds);
+
+		tv.tv_sec = 2;
+		tv.tv_usec = 0;
+
+		ret = select(cam->fd + 1, &fds, NULL, NULL, &tv);
+
+		switch(ret)
+		{
+		case -1:
+			break;
+		case 0:
+			printf("time out \n");
+			break;
+		default:
+			int r=read_frame_from_camera(cam, frame->data, &frame->len);
+			if(r==-1)
+			{
+				LOGE("READ FROM CAM Wrong");
+				sleep(2);
+			}
+            /*从pic拿到数据*/
+            int ret=queue_pushback(cam->q,frame);
+			if(ret==-1){
+				LOGD("pushback queue fail for FULL");
+				sleep(1);
+			}
+			//yuv_write(pic, length,fp);
+
+		//	if (pic[0] == '\0')
+		//	{
+		//		break;
+		//	}
+		//	out_length = compress_frame(-1, pic, pic_out);
+		//	h264_write(pic_out, out_length);
+		}
+	}
+}
+void sc_writeyuv(camera_t *cam){
+
+	FILE *fp=cam->fpyuv;
+	sc_frame_t *pkt;
+	while(!cam->stopcap_flag){
+		pkt=NULL;
+	int ret=queue_popfront(cam->q, &pkt);
+	if(ret==-1){
+		LOGD("pop front fail");
+		sleep(1);
+	}else{
+		LOGD("write frame to yuv fp len[%d]",pkt->len);
+		yuv_write(pkt->data,pkt->len,fp);
+		delete_frame(pkt);
+	}
 	}
 }
 
@@ -216,9 +331,7 @@ jpeg(FILE* dest, uint8_t* rgb, uint32_t width, uint32_t height, int quality)
   }
   free(image);
 }
-#define OUT_JPEG 1
-#define SC_WIDTH 640
-#define SC_HEIGHT 480
+
 
 int main(int argc, char* argv[])
 {
@@ -226,6 +339,7 @@ int main(int argc, char* argv[])
   uint32_t width = argc > 2 ? atoi(argv[2]) : SC_WIDTH;
   uint32_t height = argc > 3 ? atoi(argv[3]) : SC_HEIGHT;
   char* output = argc > 4 ? argv[4] : "result.jpg";
+
 
   FILE *fpyuv;
   char *yuv_file="zb.yuv";
@@ -240,6 +354,8 @@ int main(int argc, char* argv[])
     fprintf(stderr, "[%s] %s\n", device, strerror(errno));
     return EXIT_FAILURE;
   }
+  /*FILE *fpyuv */
+  camera->fpyuv=fpyuv;
   LOGD("config with width[%d] height[%d]",width,height);
   camera_format_t config = {0, width, height, {0, 0}};
   if (!camera_config_set(camera, &config)) goto error;
@@ -303,6 +419,11 @@ LOGD("out a jpeg w[%d] h[%d]",camera->width, camera->height);
   }
   #else
   // get_and_compress_pic(camera,fpyuv,width,height,2);
+  /*typedef unsigned long int pthread_t*/
+  pthread_t pid_getframe,pid_writeyuv;
+  pthread_create(&pid_getframe,NULL,sc_get_frame,camera);
+  pthread_create(&pid_writeyuv,NULL,sc_writeyuv,camera);
+
   #endif
 
 

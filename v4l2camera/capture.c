@@ -62,6 +62,7 @@ camera_t* camera_open(const char * device)
   camera->head.start = NULL;
   camera->context.pointer = NULL;
   camera->context.log = &log_stderr;
+  camera->q=queue_new(20);
   return camera;
 }
 
@@ -214,6 +215,8 @@ bool camera_close(camera_t* camera)
   for (int i = 0; i < 10; i++) {
     if (close(camera->fd) != -1) break;
   }
+  if(camera->q)
+  	queue_delete(camera->q);
   free(camera);
   return true;
 }
