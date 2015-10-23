@@ -5,6 +5,8 @@
  *   gcc -std=c11 -Wall -Wextra -c capture.c -o capture.o
  *   gcc -std=c11 -Wall -Wextra -c capture-jpeg.c -o capture-jpeg.o
  *   gcc -Wall -Wextra capture.o capture-jpeg.o -ljpeg -o capture-jpeg
+
+ gcc -o  armqueueyuv capture.c capture_jpeg.c sc/sc_frame.c sc/sc_queue.c -ljpeg -lpthread -std=c99 -I. -I./sc -g
  */
 
 #include "capture.h"
@@ -88,14 +90,20 @@ int file_write(uint8 *src, int length, FILE *fd)
 		//check parameter
 		if (fd == NULL)
 		{
-			printf("wrong file operator in file write function\n");
+			LOGD("=1=wrong file operator in file write function\n");
 			ret_status = PARAMERROR;
 			break;
 		}
 
-		if (NULL == src || length < 1)
+		if (NULL == src || length < 1) /*这里*/
 		{
-			printf("wrong source input into file write function\n");
+			LOGD("=2=wrong source input into file write function\n");
+			if(NULL==src){
+				LOGD("SRC IS NULL");
+			}
+			if(length<1){
+				LOGD("LENGTH < 1");
+			}
 			ret_status = PARAMERROR;
 			break;
 		}
@@ -103,7 +111,7 @@ int file_write(uint8 *src, int length, FILE *fd)
 		//write to file
 		if (0 == fwrite(src, length, 1, fd))
 		{
-			printf("write file wrong\n");
+			LOGD("write file wrong\n");
 			ret_status = FILEERROR;
 			break;
 		}
@@ -194,10 +202,14 @@ int get_and_compress_pic(camera_t *cam,FILE* fp,int width,int height,int bpp)
 /*
 在 pthread_create 的第三个参数，是这么定义的:
     void *(* _start_routine) (void *)
+
+http://outofmemory.cn/code-snippet/34450/linux-create-function-pthread-create-mode
+  返回值是void *, 用  return ((void *) 0);
 */
 
-void sc_get_frame(camera_t *cam)//,int width,int height,int bpp)
+void *sc_get_frame(void *camera)//,int width,int height,int bpp)
 {
+	camera_t *cam=(void *)camera;
 	int width=SC_WIDTH;
 	int height=SC_HEIGHT;
 	int bpp=2;
@@ -209,9 +221,7 @@ void sc_get_frame(camera_t *cam)//,int width,int height,int bpp)
 	uint8 *pic;
 	uint8 *pic_out;
 	int out_length=0;
-
     int pic_size=width * height * bpp;
-	sc_frame_t *frame=new_frame(pic_size);
 	//pic = (int8 *)malloc(pic_size); //内存在这里分配
 	//if (NULL == pic)
 	//	{
@@ -228,11 +238,12 @@ void sc_get_frame(camera_t *cam)//,int width,int height,int bpp)
 
 	while(!cam->stopcap_flag)
 	{
+		sc_frame_t *frame=new_frame(pic_size);
 		length = 0;
 	//	out_length = 0;
 	//	memset(pic, 0, pic_size);
 	//	memset(pic_out, 0, pic_size);
-		printf("\n\n this is the %d th frame\n", count);
+		//LOGD("this is the %d th frame", count);
 		if (count++ > 100)
 		{
 			printf("exit\n");
@@ -252,21 +263,28 @@ void sc_get_frame(camera_t *cam)//,int width,int height,int bpp)
 		case -1:
 			break;
 		case 0:
-			printf("time out \n");
+			LOGD("time out \n");
 			break;
 		default:
-			int r=read_frame_from_camera(cam, frame->data, &frame->len);
-			if(r==-1)
+		{
+			int rr=read_frame_from_camera(cam, frame->data, &frame->len);
+			if(rr==-1)
 			{
 				LOGE("READ FROM CAM Wrong");
 				sleep(2);
 			}
             /*从pic拿到数据*/
+			LOGD("pushback [%d]th frame",count);
             int ret=queue_pushback(cam->q,frame);
 			if(ret==-1){
 				LOGD("pushback queue fail for FULL");
 				sleep(1);
 			}
+			/*//add by me 20151023
+			go out of switch ,not while
+			*/
+			break;
+		}
 			//yuv_write(pic, length,fp);
 
 		//	if (pic[0] == '\0')
@@ -277,23 +295,36 @@ void sc_get_frame(camera_t *cam)//,int width,int height,int bpp)
 		//	h264_write(pic_out, out_length);
 		}
 	}
+	 return ((void *) 0);
 }
-void sc_writeyuv(camera_t *cam){
+void *sc_writeyuv(void *camera){
+    camera_t* cam=(camera_t *)camera;
 
 	FILE *fp=cam->fpyuv;
-	sc_frame_t *pkt;
+	sc_frame_t *pkt=NULL;
 	while(!cam->stopcap_flag){
 		pkt=NULL;
-	int ret=queue_popfront(cam->q, &pkt);
-	if(ret==-1){
-		LOGD("pop front fail");
-		sleep(1);
-	}else{
-		LOGD("write frame to yuv fp len[%d]",pkt->len);
-		yuv_write(pkt->data,pkt->len,fp);
-		delete_frame(pkt);
-	}
-	}
+		int ret=queue_popfront(cam->q, &pkt);
+		if(ret==-1){
+			LOGD("pop front fail");
+			sleep(1);
+		}else{
+		    if(pkt!=NULL){
+				LOGD("write frame to yuv fp len[%d]",pkt->len);
+				if(yuv_write(pkt->data,pkt->len,fp)!=SUCCESS)
+				{
+					LOGD("YUVWRITE FAIL");
+				}
+				else{
+					LOGD("write yuv ok");
+					delete_frame(pkt);
+				}
+	    	}else{
+	    		LOGE("ERROR popfront GET NULL PKT");
+			}
+	   }
+   }
+   return ((void *) 0);
 }
 
 

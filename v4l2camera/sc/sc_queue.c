@@ -92,20 +92,30 @@ int queue_popfront(sc_queue_t * q, sc_pkt **pkt){
 			return -1;
 		}
 		(*pkt)=q->head->pkt;
+		if((*pkt)==NULL){
+			LOGE("##WRONG###head pkt is NULL !!!!!");
+			return -1;
+		}
 		sc_entry_t *next=q->head->next;
-		//if(next)/*既然已经不是空的，那么next肯定不是空的对吧*/
+		if(next)/*取完之后，next可能是空的*/
 		{
 			next->prev=NULL;
 			q->head=next;
 			q->level-=1;
+		}else
+		{
+			LOGD("after pop ,next is NULL");
 			/*检查pop后是不是空了*/
 			if(q->level==0){
-				q->head=q->tail=NULL;
-				q->head->prev=NULL;
-				q->head->next=NULL;
+				LOGD("AT THIS TIME ,level SHOULD BE  0");
 			}
-		}
-		return 0;
+			q->head=q->tail=NULL;
+			/*俩空指针怎么会有prev和next呢，而且他们都没分配空间的，所以不能给各个域名赋值的*/
+			//q->head->prev=NULL;
+			//q->head->next=NULL;
+
+	    }
+	  return 0;
 	}else{
 		LOGE("Q IS NULL ,pop front queue fail");
 		return -1;
