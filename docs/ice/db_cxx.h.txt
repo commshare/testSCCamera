@@ -1,0 +1,296 @@
+ce 3.4.1安装  
+
+2012-03-16 11:52:49|  分类： 默认分类 |  标签：ice   |举报|字号 订阅
+    
+    下载LOFTER客户端
+    虽然ice已经发布了3.4.2版，但公司的环境要求使用3.4.1版本。
+    zeroc.com 的download里找到previous versions
+    下载，解压缩。
+    先安装cpp版。
+
+    cd cpp
+    vi config/Make.rules  设置prefix等环境参数。
+    make
+
+
+    提示缺少 lmcpp
+    sudo apt-get install libmcpp-dev
+
+    make
+    提示：Parser.cpp:13:19: fatal error: expat.h: 没有那个文件或目录
+    sudo apt-get install libexpat-dev
+
+    make
+    提示 ：../IceSSL/UtilF.h:17:25: fatal error: openssl/ssl.h: 没有那个文件或目录
+    sudo apt-get install libssl-dev
+
+    make
+    提示：../Freeze/TransactionI.h:15:20: fatal error: db_cxx.h: 没有那个文件或目录
+    sudo apt-get install db4.8    （berkeley db 4.8？）
+
+
+    make install
+
+    安装完成。
+    执行 bin/slice2java
+    报错 ./slice2java: error while loading shared libraries: libSlice.so.34: cannot open shared object file: No such file or directory
+
+    把ice安装路径的lib目录加到/etc/ld.so.conf.d下的conf文件中。
+    sudo ldconfig 刷新缓存。
+
+    完成。
+
+
+
+    root@debian-armhf ice-3.6.1 # apt-get install db4.8  
+    正在读取软件包列表... 完成
+    正在分析软件包的依赖关系树       
+    正在读取状态信息... 完成       
+    注意，根据正则表达式 db4.8 选中了 libdb4.8-tcl
+    注意，根据正则表达式 db4.8 选中了 libdb4o8.0-cil
+    注意，根据正则表达式 db4.8 选中了 db4.8-util
+    注意，根据正则表达式 db4.8 选中了 libdb4.8-java-dev
+    注意，根据正则表达式 db4.8 选中了 libdb4.8++-dev
+    注意，根据正则表达式 db4.8 选中了 libdb4.8
+    注意，根据正则表达式 db4.8 选中了 libdb4.8-dev
+    有一些软件包无法被安装。如果您用的是 unstable 发行版，这也许是
+    因为系统无法达到您要求的状态造成的。该版本中可能会有一些您需要的软件
+    包尚未被创建或是它们已被从新到(Incoming)目录移出。
+    下列信息可能会对解决问题有所帮助：
+
+    下列软件包有未满足的依赖关系：
+     libdb4o8.0-cil : 依赖: libmono-corlib4.0-cil (>= 2.10.1) 但是它将不会被安装
+                       依赖: libmono-system-core4.0-cil (>= 2.10.3) 但是它将不会被安装
+                                         依赖: libmono-system4.0-cil (>= 2.10.1) 但是它将不会被安装
+                                         E: 无法修正错误，因为您要求某些软件包保持现状，就是它们破坏了软件包间的依赖关系
+                                         
+                                         
+注
+root@debian-armhf cpp # apt-get install db5.*
+正在读取软件包列表... 完成
+正在分析软件包的依赖关系树       
+正在读取状态信息... 完成       
+注意，根据正则表达式 db5.* 选中了 libdb5.1-java
+注意，根据正则表达式 db5.* 选中了 libghc-blaze-html-dev-0.4.3.1-0edb5
+注意，根据正则表达式 db5.* 选中了 libdb5.1-sql-dev
+注意，根据正则表达式 db5.* 选中了 libdb5.1-dbg
+注意，根据正则表达式 db5.* 选中了 libdb5.1-dev
+注意，根据正则表达式 db5.* 选中了 libdb5.1-java-dev
+注意，根据正则表达式 db5.* 选中了 libdb5.1++
+注意，根据正则表达式 db5.* 选中了 libdb5.1-java-gcj
+注意，根据正则表达式 db5.* 选中了 libdb5.1-java-jni
+注意，根据正则表达式 db5.* 选中了 libghc-bloomfilter-dev-1.2.6.8-3db53
+注意，根据正则表达式 db5.* 选中了 libdb5.1-tcl
+注意，根据正则表达式 db5.* 选中了 libdb5.1-sql
+注意，根据正则表达式 db5.* 选中了 libdb5.1-stl
+注意，根据正则表达式 db5.* 选中了 libghc-bloomfilter-prof-1.2.6.8-3db53
+注意，根据正则表达式 db5.* 选中了 libdb5.1++-dev
+注意，根据正则表达式 db5.* 选中了 libdb5.1-stl-dev
+注意，根据正则表达式 db5.* 选中了 libsybdb5
+注意，根据正则表达式 db5.* 选中了 libghc-blaze-html-prof-0.4.3.1-0edb5
+注意，根据正则表达式 db5.* 选中了 db5.1-sql-util
+注意，根据正则表达式 db5.* 选中了 libdb5.1
+注意，根据正则表达式 db5.* 选中了 libkdb5-6
+注意，根据正则表达式 db5.* 选中了 db5.1-util
+注意，根据正则表达式 db5.* 选中了 db5.1-doc
+注意，选取 libghc-blaze-html-dev 而非 libghc-blaze-html-dev-0.4.3.1-0edb5
+注意，选取 libghc-blaze-html-prof 而非 libghc-blaze-html-prof-0.4.3.1-0edb5
+注意，选取 libghc-bloomfilter-dev 而非 libghc-bloomfilter-dev-1.2.6.8-3db53
+注意，选取 libghc-bloomfilter-prof 而非 libghc-bloomfilter-prof-1.2.6.8-3db53
+libdb5.1 已经是最新的版本了。
+下列软件包是自动安装的并且现在不需要了：
+  libfltk1.1 libsamplerate0
+Use 'apt-get autoremove' to remove them.
+将会安装下列额外的软件包：
+  binfmt-support freetds-common gcj-4.7-base ghc ghc-prof libbsd-dev
+  libffi-dev libgcj-bc libgcj-common libgcj13 libghc-blaze-builder-dev
+  libghc-blaze-builder-prof libghc-text-dev libghc-text-prof libgmp-dev
+  libgmpxx4ldbl libgssrpc4 libllvm3.0 llvm-3.0 llvm-3.0-runtime tcl tcl8.5
+建议安装的软件包：
+  ghc-doc haskell-doc libgcj13-dbg libgcj13-awt libghc-blaze-builder-doc
+  libghc-blaze-html-doc libghc-bloomfilter-doc libghc-text-doc libgmp10-doc
+  libmpfr-dev krb5-doc krb5-user llvm-3.0-doc tcl-tclreadline
+推荐安装的软件包：
+  gcj-4.7-jre-lib llvm-3.0-dev
+下列【新】软件包将被安装：
+  binfmt-support db5.1-doc db5.1-sql-util db5.1-util freetds-common
+  gcj-4.7-base ghc ghc-prof libbsd-dev libdb5.1++ libdb5.1++-dev libdb5.1-dbg
+  libdb5.1-dev libdb5.1-java libdb5.1-java-dev libdb5.1-java-gcj
+  libdb5.1-java-jni libdb5.1-sql libdb5.1-sql-dev libdb5.1-stl
+  libdb5.1-stl-dev libdb5.1-tcl libffi-dev libgcj-bc libgcj-common libgcj13
+  libghc-blaze-builder-dev libghc-blaze-builder-prof libghc-blaze-html-dev
+  libghc-blaze-html-prof libghc-bloomfilter-dev libghc-bloomfilter-prof
+  libghc-text-dev libghc-text-prof libgmp-dev libgmpxx4ldbl libgssrpc4
+  libkdb5-6 libllvm3.0 libsybdb5 llvm-3.0 llvm-3.0-runtime tcl tcl8.5
+升级了 0 个软件包，新安装了 44 个软件包，要卸载 0 个软件包，有 20 个软件包未被升级。
+需要下载 194 MB 的软件包。
+解压缩后会消耗掉 658 MB 的额外空间。
+您希望继续执行吗？[Y/n]n
+中止执行。
+root@debian-armhf cpp # apt-get install db5.1
+正在读取软件包列表... 完成
+正在分析软件包的依赖关系树       
+正在读取状态信息... 完成       
+注意，根据正则表达式 db5.1 选中了 libdb5.1-java
+注意，根据正则表达式 db5.1 选中了 libdb5.1-sql-dev
+注意，根据正则表达式 db5.1 选中了 libdb5.1-dbg
+注意，根据正则表达式 db5.1 选中了 libdb5.1-dev
+注意，根据正则表达式 db5.1 选中了 libdb5.1-java-dev
+注意，根据正则表达式 db5.1 选中了 libdb5.1++
+注意，根据正则表达式 db5.1 选中了 libdb5.1-java-gcj
+注意，根据正则表达式 db5.1 选中了 libdb5.1-java-jni
+注意，根据正则表达式 db5.1 选中了 libdb5.1-tcl
+注意，根据正则表达式 db5.1 选中了 libdb5.1-sql
+注意，根据正则表达式 db5.1 选中了 libdb5.1-stl
+注意，根据正则表达式 db5.1 选中了 libdb5.1++-dev
+注意，根据正则表达式 db5.1 选中了 libdb5.1-stl-dev
+注意，根据正则表达式 db5.1 选中了 db5.1-sql-util
+注意，根据正则表达式 db5.1 选中了 libdb5.1
+注意，根据正则表达式 db5.1 选中了 db5.1-util
+注意，根据正则表达式 db5.1 选中了 db5.1-doc
+libdb5.1 已经是最新的版本了。
+下列软件包是自动安装的并且现在不需要了：
+  libfltk1.1 libsamplerate0
+Use 'apt-get autoremove' to remove them.
+将会安装下列额外的软件包：
+  gcj-4.7-base libgcj-bc libgcj-common libgcj13 tcl tcl8.5
+建议安装的软件包：
+  libgcj13-dbg libgcj13-awt tcl-tclreadline
+推荐安装的软件包：
+  gcj-4.7-jre-lib
+下列【新】软件包将被安装：
+  db5.1-doc db5.1-sql-util db5.1-util gcj-4.7-base libdb5.1++ libdb5.1++-dev
+  libdb5.1-dbg libdb5.1-dev libdb5.1-java libdb5.1-java-dev libdb5.1-java-gcj
+  libdb5.1-java-jni libdb5.1-sql libdb5.1-sql-dev libdb5.1-stl
+  libdb5.1-stl-dev libdb5.1-tcl libgcj-bc libgcj-common libgcj13 tcl tcl8.5
+升级了 0 个软件包，新安装了 22 个软件包，要卸载 0 个软件包，有 20 个软件包未被升级。
+需要下载 72.5 MB 的软件包。
+解压缩后会消耗掉 142 MB 的额外空间。
+您希望继续执行吗？[Y/n]y
+获取：1 http://ftp.cn.debian.org/debian/ wheezy/main libdb5.1++ armhf 5.1.29-5 [633 kB]
+获取：2 http://ftp.cn.debian.org/debian/ wheezy/main libdb5.1-java-jni armhf 5.1.29-5 [639 kB]
+获取：3 http://ftp.cn.debian.org/debian/ wheezy/main libgcj-common all 1:4.6.3-8 [139 kB]
+获取：4 http://ftp.cn.debian.org/debian/ wheezy/main gcj-4.7-base armhf 4.7.2-3 [136 kB]
+获取：5 http://ftp.cn.debian.org/debian/ wheezy/main libgcj13 armhf 4.7.2-3 [11.5 MB]
+获取：6 http://ftp.cn.debian.org/debian/ wheezy/main libgcj-bc armhf 4.7.2-1 [1,184 B]
+获取：7 http://ftp.cn.debian.org/debian/ wheezy/main libdb5.1-sql armhf 5.1.29-5 [797 kB]
+获取：8 http://ftp.cn.debian.org/debian/ wheezy/main libdb5.1-stl armhf 5.1.29-5 [658 kB]
+获取：9 http://ftp.cn.debian.org/debian/ wheezy/main tcl8.5 armhf 8.5.11-2 [1,538 kB]
+获取：10 http://ftp.cn.debian.org/debian/ wheezy/main tcl all 8.5.0-2.1 [4,762 B]
+获取：11 http://ftp.cn.debian.org/debian/ wheezy/main libdb5.1-tcl armhf 5.1.29-5 [2,240 kB]
+获取：12 http://ftp.cn.debian.org/debian/ wheezy/main db5.1-util armhf 5.1.29-5 [79.5 kB]
+获取：13 http://ftp.cn.debian.org/debian/ wheezy/main db5.1-doc all 5.1.29-5 [17.3 MB]
+29% [13 db5.1-doc 3,040 kB/17.3 MB 18%]                        2,319 kB/s 22秒asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad RX Length 682
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad RX Length 682
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+32% [13 db5.1-doc 4,613 kB/17.3 MB 27%]                        2,319 kB/s 21秒asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad RX Length 590
+36% [13 db5.1-doc 8,037 kB/17.3 MB 46%]                        2,319 kB/s 19秒asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad RX Length 602
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad RX Length 1454
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad RX Length 1454
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad RX Length 1454
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad RX Length 1454
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad RX Length 602
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+38% [13 db5.1-doc 9,266 kB/17.3 MB 54%]                        2,319 kB/s 19秒asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad RX Length 626
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+获取：14 http://ftp.cn.debian.org/debian/ wheezy/main libdb5.1-java all 5.1.29-5 [526 kB]
+获取：15 http://ftp.cn.debian.org/debian/ wheezy/main libdb5.1-java-dev armhf 5.1.29-5 [743 kB]
+获取：16 http://ftp.cn.debian.org/debian/ wheezy/main libdb5.1-java-gcj armhf 5.1.29-5 [623 kB]
+获取：17 http://ftp.cn.debian.org/debian/ wheezy/main db5.1-sql-util armhf 5.1.29-5 [20.7 kB]
+获取：18 http://ftp.cn.debian.org/debian/ wheezy/main libdb5.1-dev armhf 5.1.29-5 [729 kB]
+获取：19 http://ftp.cn.debian.org/debian/ wheezy/main libdb5.1++-dev armhf 5.1.29-5 [1,482 kB]
+获取：20 http://ftp.cn.debian.org/debian/ wheezy/main libdb5.1-dbg armhf 5.1.29-5 [29.2 MB]
+78% [20 libdb5.1-dbg 16.9 MB/29.2 MB 58%]                      1,111 kB/s 14秒asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad RX Length 638
+80% [20 libdb5.asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+1-dbg 18.6 MB/29.2 MB 64%]      asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad RX Length 1454
+                asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+获取：21 http://ftp.cn.debian.org/debian/ wheezy/main libdb5.1-sql-dev armhf 5.1.29-5 [1,892 kB]
+获取：22 http://ftp.cn.debian.org/debian/ wheezy/main libdb5.1-stl-dev armhf 5.1.29-5 [1,637 kB]
+下载 72.5 MB，耗时 2分 5秒 (580 kB/s)                                          
+Selecting previously unselected package libdb5.1++:armhf.
+(正在读取数据库 ... 系统当前共安装有 36011 个文件和目录。)
+正在解压缩 libdb5.1++:armhf (从 .../libdb5.1++_5.1.29-5_armhf.deb) ...
+Selecting previously unselected package libdb5.1-java-jni:armhf.
+正在解压缩 libdb5.1-java-jni:armhf (从 .../libdb5.1-java-jni_5.1.29-5_armhf.deb) ...
+Selecting previously unselected package libgcj-common.
+正在解压缩 libgcj-common (从 .../libgcj-common_1%3a4.6.3-8_all.deb) ...
+Selecting previously unselected package gcj-4.7-base.
+正在解压缩 gcj-4.7-base (从 .../gcj-4.7-base_4.7.2-3_armhf.deb) ...
+Selecting previously unselected package libgcj13.
+正在解压缩 libgcj13 (从 .../libgcj13_4.7.2-3_armhf.deb) ...
+Selecting previously unselected package libgcj-bc:armhf.
+正在解压缩 libgcj-bc:armhf (从 .../libgcj-bc_4.7.2-1_armhf.deb) ...
+Selecting previously unselected package libdb5.1-sql:armhf.
+正在解压缩 libdb5.1-sql:armhf (从 .../libdb5.1-sql_5.1.29-5_armhf.deb) ...
+Selecting previously unselected package libdb5.1-stl:armhf.
+正在解压缩 libdb5.1-stl:armhf (从 .../libdb5.1-stl_5.1.29-5_armhf.deb) ...
+Selecting previously unselected package tcl8.5.
+正在解压缩 tcl8.5 (从 .../tcl8.5_8.5.11-2_armhf.deb) ...
+Selecting previously unselected package tcl.
+正在解压缩 tcl (从 .../archives/tcl_8.5.0-2.1_all.deb) ...
+Selecting previously unselected package libdb5.1-tcl:armhf.
+正在解压缩 libdb5.1-tcl:armhf (从 .../libdb5.1-tcl_5.1.29-5_armhf.deb) ...
+Selecting previously unselected package db5.1-util.
+正在解压缩 db5.1-util (从 .../db5.1-util_5.1.29-5_armhf.deb) ...
+Selecting previously unselected package db5.1-doc.
+正在解压缩 db5.1-doc (从 .../db5.1-doc_5.1.29-5_all.deb) ...
+Selecting previously unselected package libdb5.1-java.
+正在解压缩 libdb5.1-java (从 .../libdb5.1-java_5.1.29-5_all.deb) ...
+Selecting previously unselected package libdb5.1-java-dev.
+正在解压缩 libdb5.1-java-dev (从 .../libdb5.1-java-dev_5.1.29-5_armhf.deb) ...
+Selecting previously unselected package libdb5.1-java-gcj.
+正在解压缩 libdb5.1-java-gcj (从 .../libdb5.1-java-gcj_5.1.29-5_armhf.deb) ...
+Selecting previously unselected package db5.1-sql-util.
+正在解压缩 db5.1-sql-util (从 .../db5.1-sql-util_5.1.29-5_armhf.deb) ...
+Selecting previously unselected package libdb5.1-dev.
+正在解压缩 libdb5.1-dev (从 .../libdb5.1-dev_5.1.29-5_armhf.deb) ...
+Selecting previously unselected package libdb5.1++-dev.
+正在解压缩 libdb5.1++-dev (从 .../libdb5.1++-dev_5.1.29-5_armhf.deb) ...
+Selecting previously unselected package libdb5.1-dbg:armhf.
+正在解压缩 libdb5.1-dbg:armhf (从 .../libdb5.1-dbg_5.1.29-5_armhf.deb) ...
+Selecting previously unselected package libdb5.1-sql-dev.
+正在解压缩 libdb5.1-sql-dev (从 .../libdb5.1-sql-dev_5.1.29-5_armhf.deb) ...
+Selecting previously unselected package libdb5.1-stl-dev.
+正在解压缩 libdb5.1-stl-dev (从 .../libdb5.1-stl-dev_5.1.29-5_armhf.deb) ...
+正在处理用于 man-db 的触发器...
+正在处理用于 menu 的触发器...
+正在设置 libdb5.1++:armhf (5.1.29-5) ...
+正在设置 libdb5.1-java-jni:armhf (5.1.29-5) ...
+正在设置 libgcj-common (1:4.6.3-8) ...
+正在设置 gcj-4.7-base (4.7.2-3) ...
+正在设置 libgcj13 (4.7.2-3) ...
+正在设置 libgcj-bc:armhf (4.7.2-1) ...
+正在设置 libdb5.1-sql:armhf (5.1.29-5) ...
+正在设置 libdb5.1-stl:armhf (5.1.29-5) ...
+正在设置 tcl8.5 (8.5.11-2) ...
+update-alternatives: using /usr/bin/tclsh8.5 to provide /usr/bin/tclsh (tclsh) in 自动模式
+正在设置 tcl (8.5.0-2.1) ...
+update-alternatives: using /usr/bin/tclsh-default to provide /usr/bin/tclsh (tclsh) in 自动模式
+正在设置 libdb5.1-tcl:armhf (5.1.29-5) ...
+正在设置 db5.1-util (5.1.29-5) ...
+正在设置 db5.1-doc (5.1.29-5) ...
+正在设置 libdb5.1-java (5.1.29-5) ...
+正在设置 libdb5.1-java-dev (5.1.29-5) ...
+正在设置 libdb5.1-java-gcj (5.1.29-5) ...
+正在设置 db5.1-sql-util (5.1.29-5) ...
+正在设置 libdb5.1-dev (5.1.29-5) ...
+正在设置 libdb5.1++-dev (5.1.29-5) ...
+正在设置 libdb5.1-dbg:armhf (5.1.29-5) ...
+正在设置 libdb5.1-sql-dev (5.1.29-5) ...
+正在设置 libdb5.1-stl-dev (5.1.29-5) ...
+正在处理用于 menu 的触发器...
+root@debian-armhf cpp # 
+                                         
+                                         
+                                         。

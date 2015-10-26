@@ -24,6 +24,7 @@ sc_queue_t *queue_new(int size){
 		q->size=size;/*队列有大小上限的*/
 		q->level=0;
 		q->head=q->tail=NULL;/*加不加都一样的*/
+		sc_lock_init(&q->mutex,NULL);
 		LOGD("queue new OK");
 	}else
 		LOGD("queue new FAIL");
@@ -31,9 +32,12 @@ sc_queue_t *queue_new(int size){
 }
 void queue_delete(sc_queue_t *q){
 	if(q){
+		sc_lock(&q->mutex);
 		memset(q,0,sizeof(sc_queue_t));
 		free(q);
 		q=NULL;
+		sc_unlock(&q->mutex);
+
 	}
 }
 
@@ -54,14 +58,18 @@ int queue_full(sc_queue_t *q){
 
 
 int queue_pushback(sc_queue_t * q, sc_pkt * pkt){
+		sc_lock(&q->mutex);
+
 	//assert(q!=NULL && pkt!=NULL);
 	if(q==NULL || pkt==NULL){
 		LOGE("QUEUE PUSHBACK FAIL FOR EXCEPTION!");
+		sc_unlock(&q->mutex);
 		return -1;
 	}
 	if(queue_full(q))
 	{
 		LOGD("queue is full,cannot pushback");
+		sc_unlock(&q->mutex);
 		return -1;
 	}
 
@@ -82,20 +90,28 @@ int queue_pushback(sc_queue_t * q, sc_pkt * pkt){
 	q->tail=entry;
 	q->tail->next=NULL;
 	q->level+=1;
+	sc_unlock(&q->mutex);
 	return 0;
 }
 
 int queue_popfront(sc_queue_t * q, sc_pkt **pkt){
+	sc_lock(&q->mutex);
 	if(q!=NULL){
 		if(queue_empty(q)){
 			LOGE("queue is empty ,popfront FAIL");
+			sc_unlock(&q->mutex);
 			return -1;
 		}
+		LOGD("q level [%d]",q->level);
 		(*pkt)=q->head->pkt;
+		LOGD("$$$$$$$$$$$$$");
+		#if 0
 		if((*pkt)==NULL){
 			LOGE("##WRONG###head pkt is NULL !!!!!");
 			return -1;
 		}
+		#endif
+		LOGD("-----1---------");
 		sc_entry_t *next=q->head->next;
 		if(next)/*取完之后，next可能是空的*/
 		{
@@ -115,9 +131,11 @@ int queue_popfront(sc_queue_t * q, sc_pkt **pkt){
 			//q->head->next=NULL;
 
 	    }
+	sc_unlock(&q->mutex);
 	  return 0;
 	}else{
 		LOGE("Q IS NULL ,pop front queue fail");
+		sc_unlock(&q->mutex);
 		return -1;
 	}
 }

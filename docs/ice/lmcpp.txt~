@@ -1,0 +1,170 @@
+ubuntu下安装ICE出现’cannot find -lmcpp’解决
+Posted by 南部村夫 on Apr 22, 2011 in Linux |
+Subscribe
+1、安装mcpp:
+1
+sudo apt-get install mcpp
+2、创建mcpp的符号链接
+1
+sudo ln -s /usr/lib/libmcpp.so.0.2.0 /usr/lib/libmcpp.so
+
+
+http://www.winzp.org/blog/archives/325
+
+度娘了下，基本上是没结果。有一个sudo apt-get install mcpp
+因为我是源码安装的，所以就排除了这个。
+后面仔细 阅读了ThirdParty-Sources-3.5.1中的README.
+解决方案为：
+修改安装mcpp目录下的lib为lib64 （服务器是64位）
+mv  /usr/local/ICE-3.5.1/mcpp-2.7.2/lib /usr/local/ICE-3.5.1/mcpp-2.7.2/lib64
+问题迎刃而解了。
+转自【ZengBurylife's Blog】：http://burylife.sinaapp.com/124.html
+
+
+[100%] Building CXX object CMakeFiles/v4l2server.dir/imagei.o
+/home/sccamfb/ref/v4l2server/imagei.cpp:8:21: fatal error: Ice/Ice.h: 没有那个文件或目录
+compilation terminated.
+make[2]: *** [CMakeFiles/v4l2server.dir/imagei.o] 错误 1
+make[1]: *** [CMakeFiles/v4l2server.dir/all] 错误 2
+make: *** [all] 错误 2
+root@debian-armhf v4l2server # cd ..
+root@debian-armhf ref # ls
+h264_v4l2_rtspserver  ice-3.6.1X86       v4l2grab
+ice-3.6.1             lab_v4l2_yuyv.zip  v4l2server
+ice-3.6.1.tar.gz      pi_baby_monitor    videoCapture
+root@debian-armhf ref # cd ice-3.6.1
+root@debian-armhf ice-3.6.1 # ls
+allTests.py       CHANGELOG-3.5.md  csharp       Makefile      python
+android           CHANGELOG-3.6.md  ICE_LICENSE  Makefile.mak  README.md
+certs             config            java         man           ruby
+CHANGELOG-3.3.md  CONTRIBUTING.md   js           objective-c   scripts
+CHANGELOG-3.4.md  cpp               LICENSE      php           slice
+root@debian-armhf ice-3.6.1 # make
+make: Warning: File `Makefile' has modification time 1.4e+09 s in the future
+making all in cpp
+make[1]: Entering directory `/home/sccamfb/ref/ice-3.6.1/cpp'
+make[1]: Warning: File `config/Make.rules.Linux' has modification time 1.4e+09 s in the future
+making all in config
+make[2]: Entering directory `/home/sccamfb/ref/ice-3.6.1/cpp/config'
+make[2]: Warning: File `../config/Make.rules.Linux' has modification time 1.4e+09 s in the future
+make[2]: Nothing to be done for `all'.
+make[2]: 警告：检测到时钟错误。您的创建可能是不完整的。
+make[2]: Leaving directory `/home/sccamfb/ref/ice-3.6.1/cpp/config'
+making all in src
+make[2]: Entering directory `/home/sccamfb/ref/ice-3.6.1/cpp/src'
+make[2]: Warning: File `../config/Make.rules.Linux' has modification time 1.4e+09 s in the future
+making all in IceUtil
+make[3]: Entering directory `/home/sccamfb/ref/ice-3.6.1/cpp/src/IceUtil'
+make[3]: Warning: File `../../config/Make.rules.Linux' has modification time 1.4e+09 s in the future
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g ArgVector.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Cond.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g ConvertUTF.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g CountDownLatch.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g CtrlCHandler.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Exception.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g FileUtil.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g InputUtil.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g MutexProtocol.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Options.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g OutputUtil.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Random.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g RecMutex.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g SHA1.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Shared.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g StringConverter.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g StringUtil.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Thread.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g ThreadException.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Time.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Timer.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Unicode.cpp
+g++ -c -I../../include  -DICE_UTIL_API_EXPORTS -I..  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g UUID.cpp
+rm -f ../../lib/libIceUtil.so.3.6.1
+g++ -shared -rdynamic  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g -L../../lib -o ../../lib/libIceUtil.so.3.6.1 -Wl,-h,libIceUtil.so.36 ArgVector.o Cond.o ConvertUTF.o CountDownLatch.o CtrlCHandler.o Exception.o FileUtil.o InputUtil.o MutexProtocol.o Options.o OutputUtil.o Random.o RecMutex.o SHA1.o Shared.o StringConverter.o StringUtil.o Thread.o ThreadException.o Time.o Timer.o Unicode.o UUID.o -lrt  -lcrypto
+rm -f ../../lib/libIceUtil.so.36
+ln -s libIceUtil.so.3.6.1 ../../lib/libIceUtil.so.36
+rm -f ../../lib/libIceUtil.so
+ln -s libIceUtil.so.36 ../../lib/libIceUtil.so
+make[3]: 警告：检测到时钟错误。您的创建可能是不完整的。
+make[3]: Leaving directory `/home/sccamfb/ref/ice-3.6.1/cpp/src/IceUtil'
+making all in Slice
+make[3]: Entering directory `/home/sccamfb/ref/ice-3.6.1/cpp/src/Slice'
+make[3]: Warning: File `../../config/Make.rules.Linux' has modification time 1.4e+09 s in the future
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Checksum.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g CPlusPlusUtil.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g CsUtil.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g DotNetNames.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g FileTracker.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g JavaUtil.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g MD5.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g MD5I.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g ObjCUtil.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Parser.cpp
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad RX Length 202
+asix 1-1.4:1.0: eth0: asix_rx_fixup() Bad Header Length
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g PHPUtil.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Preprocessor.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g PythonUtil.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Python.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g RubyUtil.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Ruby.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Scanner.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g Util.cpp
+g++ -c -I.. -I../../include -DSLICE_API_EXPORTS  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g ../Slice/Grammar.cpp
+rm -f ../../lib/libSlice.so.3.6.1
+g++ -shared -rdynamic  -fvisibility=hidden -Wall -Werror -pthread -fPIC -g -L../../lib -o ../../lib/libSlice.so.3.6.1 -Wl,-h,libSlice.so.36 Checksum.o CPlusPlusUtil.o CsUtil.o DotNetNames.o FileTracker.o JavaUtil.o MD5.o MD5I.o ObjCUtil.o Parser.o PHPUtil.o Preprocessor.o PythonUtil.o Python.o RubyUtil.o Ruby.o Scanner.o Util.o ../Slice/Grammar.o -lIceUtil  -lmcpp
+/usr/bin/ld: cannot find -lmcpp
+collect2: ld returned 1 exit status
+make[3]: *** [../../lib/libSlice.so.3.6.1] 错误 1
+make[3]: Leaving directory `/home/sccamfb/ref/ice-3.6.1/cpp/src/Slice'
+make[2]: *** [Slice] 错误 2
+make[2]: Leaving directory `/home/sccamfb/ref/ice-3.6.1/cpp/src'
+make[1]: *** [all] 错误 1
+make[1]: Leaving directory `/home/sccamfb/ref/ice-3.6.1/cpp'
+make: *** [all] 错误 1
+root@debian-armhf ice-3.6.1 # sudo apt-get install mcpp
+没有用户“apt-get”的密码项
+root@debian-armhf ice-3.6.1 # apt-get install mcpp
+正在读取软件包列表... 完成
+正在分析软件包的依赖关系树       
+正在读取状态信息... 完成       
+下列软件包是自动安装的并且现在不需要了：
+  libfltk1.1 libsamplerate0
+Use 'apt-get autoremove' to remove them.
+将会安装下列额外的软件包：
+  libmcpp0
+建议安装的软件包：
+  mcpp-doc
+下列【新】软件包将被安装：
+  libmcpp0 mcpp
+升级了 0 个软件包，新安装了 2 个软件包，要卸载 0 个软件包，有 20 个软件包未被升级。
+需要下载 96.7 kB 的软件包。
+解压缩后会消耗掉 208 kB 的额外空间。
+您希望继续执行吗？[Y/n]y
+获取：1 http://ftp.cn.debian.org/debian/ wheezy/main libmcpp0 armhf 2.7.2-1.1 [80.0 kB]
+获取：2 http://ftp.cn.debian.org/debian/ wheezy/main mcpp armhf 2.7.2-1.1 [16.7 kB]
+下载 96.7 kB，耗时 5秒 (17.5 kB/s)
+Selecting previously unselected package libmcpp0.
+(正在读取数据库 ... 系统当前共安装有 35992 个文件和目录。)
+正在解压缩 libmcpp0 (从 .../libmcpp0_2.7.2-1.1_armhf.deb) ...
+Selecting previously unselected package mcpp.
+正在解压缩 mcpp (从 .../mcpp_2.7.2-1.1_armhf.deb) ...
+正在处理用于 man-db 的触发器...
+正在设置 libmcpp0 (2.7.2-1.1) ...
+正在设置 mcpp (2.7.2-1.1) ...
+root@debian-armhf ice-3.6.1 # 
+
+
+root@debian-armhf ice-3.6.1 # ls /usr/lib | grep "mpp"
+root@debian-armhf ice-3.6.1 # ls /usr/lib | grep "mcpp"
+libmcpp.so.0
+libmcpp.so.0.3.0
+root@debian-armhf ice-3.6.1 # ls -al libmcpp*
+ls: 无法访问libmcpp*: 没有那个文件或目录
+root@debian-armhf ice-3.6.1 # ls -al /usr/lib/libmcpp*
+lrwxrwxrwx 1 root root     16 11月 26  2011 /usr/lib/libmcpp.so.0 -> libmcpp.so.0.3.0
+-rw-r--r-- 1 root root 110432 11月 26  2011 /usr/lib/libmcpp.so.0.3.0
+
+
+
+ln -s /usr/lib/libmcpp.so.0.3.0 /usr/lib/libmcpp.so

@@ -1,0 +1,66 @@
+ICE3.5.0源码安装
+
+博客分类： ICE
+ 
+ 在这里下载http://www.zeroc.com/download.html
+ 1、ice源码包
+ http://www.zeroc.com/download/Ice/3.5/Ice-3.5.0.tar.gz
+ 2、第三方依赖库
+ http://www.zeroc.com/download/Ice/3.5/ThirdParty-Sources-3.5.0.tar.gz
+  
+  root@mydev:/opt/ThirdParty-Sources-3.5.0# patch -v
+  patch 2.6.1
+  ....
+   
+   在安装Ice-3.5.0的时候，需要第三方依赖，mcpp。
+   ICE主页提供的是mcpp-2.7.2，并提供了自己的一个patch。
+    
+     root@mydev:/opt/ThirdParty-Sources-3.5.0/mcpp-2.7.2# patch -p0 < ../mcpp/patch.mcpp.2.7.2
+     patching file ./noconfig/vc2010.dif
+     patching file ./src/internal.H
+     patching file ./src/main.c
+     patching file ./src/support.c
+     patching file ./src/system.c
+      
+      make && make install
+       
+       其实按照README的指示就好了。。
+       接着把BerkeleyDB也打上补丁并编译安装。
+        
+        然后就可以直接编译ICE源码了。
+         
+         编译中如果遇到：
+         ConnectionI.cpp:29:23: fatal error: bzlib.h: 没有那个文件或目录
+         安装bzip2的dev版
+         apt-get install libbz2-dev
+         也许还要
+         apt-get install libexpat-dev
+         apt-get install libssl-dev
+          
+          ../Freeze/TransactionI.h:15:20: fatal error: db_cxx.h: 没有那个文件或目录
+          由DB的Makefile知道其安装目录是/usr/local/BerkeleyDB.5.3
+          不要以为在环境变量PATH中加上这个路径，其实不能。
+          因为在make.rules中明确是使用DB_HOME这个环境变量的，所以要profile（每次开机会运行，to test）中加上：
+          export DB_HOME=/usr/local/BerkeleyDB.5.3
+          然后就可以编译了。
+           
+           但是
+            
+            /usr/bin/ld: cannot find -ldb_cxx
+            因为cpp/config/Make.rules中会给DB_HOME根据系统加个后缀，
+            从编译错误信息中可以看到最后这个库指定的查找路径是
+            -L/usr/local/BerkeleyDB.5.3/lib64 -ldb_cxx
+            而实际只有/usr/local/BerkeleyDB.5.3/lib，加个软链接好了。。
+            root@mydev:/usr/local/BerkeleyDB.5.3# ln -s lib lib64
+            root@mydev:/usr/local/BerkeleyDB.5.3# ls
+            bin  docs  include  lib  lib64
+            root@mydev:/usr/local/BerkeleyDB.5.3# ll
+            总用量 16
+            drwxr-sr-x  2 root staff 4096  7月 16 12:39 bin
+            drwxr-sr-x 16 root staff 4096  7月 16 12:39 docs
+            drwxr-sr-x  2 root staff 4096  7月 16 12:39 include
+            drwxr-sr-x  2 root staff 4096  7月 16 12:39 lib
+            lrwxrwxrwx  1 root staff    3  7月 16 14:03 lib64 -> lib
+            总算解决这个问题。。
+             
+             OK！编译好了。

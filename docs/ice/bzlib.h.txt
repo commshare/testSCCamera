@@ -1,0 +1,37 @@
+b.h: No such file or directory (2015-04-11 22:54:41)转载▼
+标签： bzlib.h 编译出错分类： C/C_Plus
+今天帮人编译代码，发现报错信息如下
+fatal error: bzlib.h: No such file or directory
+这个项目来自于GitHub，具体是https://github.com/robertchristensen
+一开始以为是编译器的问题，查询了其项目给出的readme文件后，发现只要求了用codeblock编译项目即可了，但是查到了这样一个要求如下：
+Also, this archiver links the following libraries: libbz2, pthread,ssl, crypto.
+然后查询后查到解决问题的办法是
+ sudo apt-get install libbz2-dev
+ 也就是在Linux环境下安装libbz2库包，这样就对上了readme里面提及的需要的库包。然后安装完这个包后，成功的编译了代码，这次经历给我几个教训：首先，对于别人的源代码，一定要认真的阅读源码的说明文件（一般在readme类似的文件中），自己发布自己源码的时候，也要注意写清楚代码的一些要求，最好给清楚如何编译调试等等内容。其次，对于代码编译的环境在编译前一定要了解清楚，上面提到的代码就是需要在Linux环境下进行编译的，也就是自己发布代码的时候，如果对于编译环境操作系统的环境如果有特殊要求的话，应该需要指明
+  
+  参考资料：
+  http://www.cnblogs.com/kingcat/archive/2012/04/23/2466680.html
+
+
+
+
+
+  root@debian-armhf ice-3.6.1 # apt-get install libbz2-dev
+  正在读取软件包列表... 完成
+  正在分析软件包的依赖关系树       
+  正在读取状态信息... 完成       
+  下列软件包是自动安装的并且现在不需要了：
+    libfltk1.1 libsamplerate0
+    Use 'apt-get autoremove' to remove them.
+    下列【新】软件包将被安装：
+      libbz2-dev
+      升级了 0 个软件包，新安装了 1 个软件包，要卸载 0 个软件包，有 20 个软件包未被升级。
+      需要下载 32.7 kB 的软件包。
+      解压缩后会消耗掉 97.3 kB 的额外空间。
+      获取：1 http://ftp.cn.debian.org/debian/ wheezy/main libbz2-dev armhf 1.0.6-4 [32.7 kB]
+      下载 32.7 kB，耗时 5秒 (6,325 B/s) 
+      Selecting previously unselected package libbz2-dev:armhf.
+      (正在读取数据库 ... 系统当前共安装有 36007 个文件和目录。)
+      正在解压缩 libbz2-dev:armhf (从 .../libbz2-dev_1.0.6-4_armhf.deb) ...
+      正在设置 libbz2-dev:armhf (1.0.6-4) ...
+      root@debian-armhf ice-3.6.1 # 
