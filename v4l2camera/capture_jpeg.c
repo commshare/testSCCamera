@@ -270,8 +270,10 @@ void *sc_get_frame(void *camera)//,int width,int height,int bpp)
 			int rr=read_frame_from_camera(cam, frame->data, &frame->len);
 			if(rr==-1)
 			{
-				LOGE("READ FROM CAM Wrong");
-				sleep(2);
+				LOGE("READ FROM CAM Wrong,delete frame the select agin");
+				//sleep(2);
+				delete_frame(frame);
+				break;//go out of switch not while ,wait for next
 			}
             /*从pic拿到数据*/
 			LOGD("pushback [%d]th frame",count);
@@ -453,7 +455,7 @@ LOGD("out a jpeg w[%d] h[%d]",camera->width, camera->height);
   /*typedef unsigned long int pthread_t*/
   pthread_t pid_getframe,pid_writeyuv;
   pthread_create(&pid_getframe,NULL,sc_get_frame,camera);
-  pthread_create(&pid_writeyuv,NULL,sc_writeyuv,camera);
+//  pthread_create(&pid_writeyuv,NULL,sc_writeyuv,camera);
 
   #endif
 

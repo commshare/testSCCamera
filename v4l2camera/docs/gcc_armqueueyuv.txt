@@ -1,4 +1,4 @@
-gcc -o armqueueyuv capture.c capture_jpeg.c sc/sc_frame.c sc/sc_queue.c -ljpeg -lpthread -std=c99 -I. -I./sc
+gcc -o armqueueyuv capture.c capture_jpeg.c sc/sc_frame.c sc/sc_queue.c -ljpeg -lpthread -std=c99 -I. -I./sc -g
 capture_jpeg.c: In function ‘read_frame_from_camera’:
     capture_jpeg.c:55:2: warning: implicit declaration of function ‘ioctl’ [-Wimplicit-function-declaration]
     capture_jpeg.c: In function ‘main’:

@@ -33,9 +33,11 @@ sc_queue_t *queue_new(int size){
 void queue_delete(sc_queue_t *q){
 	if(q){
 		sc_lock(&q->mutex);
-		memset(q,0,sizeof(sc_queue_t));
-		free(q);
-		q=NULL;
+		//memset(q,0,sizeof(sc_queue_t));
+		//free(q);
+		//q=NULL;
+		q->head=q->tail=NULL;
+		q->size=q->level=0;
 		sc_unlock(&q->mutex);
 
 	}
@@ -58,7 +60,7 @@ int queue_full(sc_queue_t *q){
 
 
 int queue_pushback(sc_queue_t * q, sc_pkt * pkt){
-		sc_lock(&q->mutex);
+	sc_lock(&q->mutex);
 
 	//assert(q!=NULL && pkt!=NULL);
 	if(q==NULL || pkt==NULL){
@@ -103,7 +105,7 @@ int queue_popfront(sc_queue_t * q, sc_pkt **pkt){
 			return -1;
 		}
 		LOGD("q level [%d]",q->level);
-		(*pkt)=q->head->pkt;
+		(*pkt)=q->head->pkt; //етРязмЪЧгаЮЪЬтАЁх
 		LOGD("$$$$$$$$$$$$$");
 		#if 0
 		if((*pkt)==NULL){
