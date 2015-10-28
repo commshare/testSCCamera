@@ -61,6 +61,7 @@ int queue_full(sc_queue_t *q){
 
 int queue_pushback(sc_queue_t * q, sc_pkt * pkt){
 	sc_lock(&q->mutex);
+	slogi("pusback begin");
 
 	//assert(q!=NULL && pkt!=NULL);
 	if(q==NULL || pkt==NULL){
@@ -75,8 +76,7 @@ int queue_pushback(sc_queue_t * q, sc_pkt * pkt){
 		return -1;
 	}
 
-    sc_entry_t *entry=NULL;
-    entry=(sc_entry_t *)malloc(sizeof(sc_entry_t));
+    sc_entry_t *entry=(sc_entry_t *)malloc(sizeof(sc_entry_t));
 	memset(entry,0,sizeof(sc_entry_t));
 	/*内存如果是在外面分配的话，入队之后，要保证内存不被销毁*/
 	entry->pkt=pkt;
@@ -84,16 +84,19 @@ int queue_pushback(sc_queue_t * q, sc_pkt * pkt){
 		LOGD("first time pushback");
 		/*head和tail一直没分配过内存啊，那么tai的几个域都是没内存的，也就无法赋值和使用*/
 		q->head=entry; /*否则tail是NULL，后面会报错*/
-		/*这是在改变entry的prev和next*/
-		//q->head->next=NULL;
-		//q->head->prev=NULL;
+        goto OK; /*注意解锁啊*/
 	}
-	q->tail->next=entry;
+	LOGD("push one");
+	q->tail->next=entry; /*第一次插入时，tail还没有任何指向(本身也未被分配过内存)，此时的next是不存在的。*/
 	//entry->prev=q->tail;
+OK:
 	entry->next=NULL;
 	q->tail=entry;
+
 	q->level+=1;
 	sc_unlock(&q->mutex);
+	LOGD("push one ok");
+
 	return 0;
 }
 
