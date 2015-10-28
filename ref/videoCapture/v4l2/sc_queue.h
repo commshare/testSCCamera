@@ -27,6 +27,7 @@ enum{
 	QALLOC_FAIL=0x20,
 	QNULL_FAIL,
 	QGNEL_FAIL,
+	QFULL_PUSHFAIL,
 };
 
 int queue_pushback(sc_queue_t * q, sc_pkt * pkt);

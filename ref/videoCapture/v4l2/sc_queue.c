@@ -73,7 +73,7 @@ int queue_pushback(sc_queue_t * q, sc_pkt * pkt){
 	{
 		sloge("queue is full [%d],cannot pushback",q->level);
 		sc_unlock(&q->mutex);
-		return QGNEL_FAIL;//-1;
+		return QFULL_PUSHFAIL;//-1;
 	}
 
     sc_entry_t *entry=(sc_entry_t *)malloc(sizeof(sc_entry_t));
