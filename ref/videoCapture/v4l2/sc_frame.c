@@ -41,7 +41,7 @@ static sc_frame_t
 	 if(frame==NULL){
 		LOGE("NEW FRAME FAIL");
 	 }
-	 LOGD("new frame ok");
+	// LOGD("new frame ok");
 	 return frame;
 }
 

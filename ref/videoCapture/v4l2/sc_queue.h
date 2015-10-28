@@ -23,6 +23,11 @@ typedef struct sc_queue_s{
 	sc_lock_t mutex;
 }sc_queue_t;
 
+enum{
+	QALLOC_FAIL=0x20,
+	QNULL_FAIL,
+	QGNEL_FAIL,
+};
 
 int queue_pushback(sc_queue_t * q, sc_pkt * pkt);
 int queue_full(sc_queue_t *q);

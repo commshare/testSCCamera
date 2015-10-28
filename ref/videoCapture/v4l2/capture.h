@@ -40,6 +40,7 @@ capture_open: using MEMORY_MMAP mode, buf cnt=2
 typedef struct camera_s{
  int fd;
  sc_queue_t *q;
+ int stopflag;
 }camera_t;
 /*
 void *capture_open (const char *dev_name, int v_width, int v_height, PixelFormat fmt);

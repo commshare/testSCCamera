@@ -61,19 +61,19 @@ int queue_full(sc_queue_t *q){
 
 int queue_pushback(sc_queue_t * q, sc_pkt * pkt){
 	sc_lock(&q->mutex);
-	slogi("pusback begin");
+	//slogi("pusback begin");
 
 	//assert(q!=NULL && pkt!=NULL);
 	if(q==NULL || pkt==NULL){
 		LOGE("QUEUE PUSHBACK FAIL FOR EXCEPTION!");
 		sc_unlock(&q->mutex);
-		return -1;
+		return 	QNULL_FAIL;/*ÒªexitµÄ*/
 	}
 	if(queue_full(q))
 	{
-		LOGD("queue is full,cannot pushback");
+		sloge("queue is full [%d],cannot pushback",q->level);
 		sc_unlock(&q->mutex);
-		return -1;
+		return QGNEL_FAIL;//-1;
 	}
 
     sc_entry_t *entry=(sc_entry_t *)malloc(sizeof(sc_entry_t));
@@ -86,16 +86,15 @@ int queue_pushback(sc_queue_t * q, sc_pkt * pkt){
 		q->head=entry; /*·ñÔòtailÊÇNULL£¬ºóÃæ»á±¨´í*/
         goto OK; /*×¢Òâ½âËø°¡*/
 	}
-	LOGD("push one");
+	//LOGD("push one");
 	q->tail->next=entry; /*µÚÒ»´Î²åÈëÊ±£¬tail»¹Ã»ÓÐÈÎºÎÖ¸Ïò(±¾ÉíÒ²Î´±»·ÖÅä¹ýÄÚ´æ)£¬´ËÊ±µÄnextÊÇ²»´æÔÚµÄ¡£*/
 	//entry->prev=q->tail;
 OK:
 	entry->next=NULL;
 	q->tail=entry;
-
 	q->level+=1;
 	sc_unlock(&q->mutex);
-	LOGD("push one ok");
+	//LOGD("push one ok");
 
 	return 0;
 }
@@ -105,11 +104,11 @@ int queue_popfront(sc_queue_t * q, sc_pkt **pkt){
 	sc_lock(&q->mutex);
 	if(q!=NULL){
 		if(queue_empty(q)){
-			LOGE("queue is empty ,popfront FAIL");
+			slogi("empty popFAIL");
 			sc_unlock(&q->mutex);
-			return -1;
+			return  QGNEL_FAIL;//-1;
 		}
-		LOGD("q level [%d]",q->level);
+		slogi("q level [%d]",q->level);
 		(*pkt)=q->head->pkt; //ÕâÀï×ÜÊÇÓÐÎÊÌâ°¡å
 		q->level-=1;
 		if(q->level ==0 ){
@@ -122,9 +121,9 @@ DONE:
 	sc_unlock(&q->mutex);
 	  return 0;
 	}else{
-		LOGE("Q IS NULL ,pop  fail");
+		slogi("Q IS NULL ,pop  fail");
 		sc_unlock(&q->mutex);
-		return -1;
+		return QNULL_FAIL;
 	}
 }
 

@@ -3,6 +3,7 @@
 #include"sc_process_image.h"
 
 #include"sc_frame.h"
+#include"sc_queue.h"
 int frame_number=0;
  void sc_process_image(const void *buf, int size,int cmd,camera_t *camera)
 {
@@ -24,7 +25,10 @@ int frame_number=0;
 		case CMD_OUT_BUF:
 		{	sc_frame_t *f=new_frame(size);
 			sc_queue_t *q=camera->q;
-			queue_pushback(q, f);
+			int ret=queue_pushback(q, f);
+			if(ret==QGNEL_FAIL){
+				sleep(1);
+			}
 			break;
 		}
 		default:
