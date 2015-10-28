@@ -44,8 +44,9 @@ static unsigned int     n_buffers       = 0;
  void
 errno_exit                      (const char *           s)
 {
-        fprintf (stderr, "%s error %d, %s\n",
-                 s, errno, strerror (errno));
+//        fprintf (stderr, "%s error %d, %s\n",
+  //               s, errno, strerror (errno));
+  LOGE("[%s]errno[%d] [%s]",s,errno,strerror(errno));
 
         exit (EXIT_FAILURE);
 }
@@ -102,15 +103,16 @@ capture_read_frame			(void)
 		break;
 
 	case IO_METHOD_MMAP:
-	//printf("###USE MMAP FOR CAPTURE ######\n"); //YES
+	//LOGD("###USE MMAP FOR CAPTURE ######\n"); //YES
 		CLEAR (buf);
 
             	buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
             	buf.memory = V4L2_MEMORY_MMAP;
 
     		if (-1 == xioctl (fd, VIDIOC_DQBUF, &buf)) {
-            		switch (errno) {
+            switch (errno) {
             		case EAGAIN:
+						    LOGE("ERROR ,RETURN 0");
                     		return 0;
 
 			case EIO:
@@ -119,6 +121,7 @@ capture_read_frame			(void)
 				/* fall through */
 
 			default:
+			    LOGE("ERROR ,EXIT");
 				errno_exit ("VIDIOC_DQBUF");
 			}
 		}

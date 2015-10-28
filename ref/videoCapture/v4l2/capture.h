@@ -30,6 +30,9 @@ capture_open: using MEMORY_MMAP mode, buf cnt=2
 
 #include <linux/videodev2.h>
 
+
+#include"sc_log.h"
+
 #define DEV_NAME "/dev/video0" //ADD BY ME
 #define CAPTURE_WIDTH 640
 #define CAPTURE_HEIGHT 480

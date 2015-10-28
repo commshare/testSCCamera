@@ -1,7 +1,15 @@
 #include"capture.h"
+#include"pthread.h"
+typedef struct camera_s{
+ int fd;
+}camera_t;
 
-void mainloop(int fd)
+//void mainloop(int fd)
+void *mainloop(void * camera)
 {
+	 camera_t *cam=(camera_t *)camera;
+	 capture_start();
+	 int	fd=cam->fd;
 	unsigned int count;
         count = 100;
         while (count-- > 0) {
@@ -39,6 +47,7 @@ void mainloop(int fd)
 			/* EAGAIN - continue select loop. */
                 }
         }
+		capture_stop();
 	//printf("##IN#Mainloop END ######\n");
 }
 
@@ -51,13 +60,18 @@ int main()
 	 	printf("###open fail \n");
 		exit (EXIT_FAILURE);
 	 }
-capture_start();
-   mainloop(fd);
- capture_stop();
+	camera_t *cam=malloc(sizeof(camera_t));
+	cam->fd=fd;
+    pthread_t cam_pid;
+
+
+  // mainloop(fd);
+  pthread_create(&cam_pid,NULL,mainloop,cam);
+ //capture_stop();
 
 	//printf("#IN##Mainloop BEGIN ######\n");
 	//ADD BY ME BEGIN
-
-
+ pthread_join (cam_pid, NULL);
+return 0;
 
 }
