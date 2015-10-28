@@ -36,7 +36,11 @@ capture_open: using MEMORY_MMAP mode, buf cnt=2
 #define DEV_NAME "/dev/video0" //ADD BY ME
 #define CAPTURE_WIDTH 640
 #define CAPTURE_HEIGHT 480
-
+#include"sc_queue.h"
+typedef struct camera_s{
+ int fd;
+ sc_queue_t *q;
+}camera_t;
 /*
 void *capture_open (const char *dev_name, int v_width, int v_height, PixelFormat fmt);
 int capture_get_picture (void *id, Picture *pic);
@@ -48,5 +52,5 @@ void errno_exit                      (const char *           s);
 int capture_open(void);
 void capture_start(void);
 void capture_stop(void);
-int capture_read_frame(void);
+int capture_read_frame			(camera_t * camera);
 #endif

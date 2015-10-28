@@ -89,7 +89,7 @@ int queue_pushback(sc_queue_t * q, sc_pkt * pkt){
 		//q->head->prev=NULL;
 	}
 	q->tail->next=entry;
-	entry->prev=q->tail;
+	//entry->prev=q->tail;
 	entry->next=NULL;
 	q->tail=entry;
 	q->level+=1;
@@ -108,50 +108,18 @@ int queue_popfront(sc_queue_t * q, sc_pkt **pkt){
 		}
 		LOGD("q level [%d]",q->level);
 		(*pkt)=q->head->pkt; //ÕâÀï×ÜÊÇÓĞÎÊÌâ°¡å
-		LOGD("$$$$$$$$$$$$$");
-		#if 0
-		if((*pkt)==NULL){
-			LOGE("##WRONG###head pkt is NULL !!!!!");
-			return -1;
-		}
-		#endif
-		LOGD("-----1---------");
-		#if 0
-		sc_entry_t *next=q->head->next;
-		if(next)/*È¡ÍêÖ®ºó£¬next¿ÉÄÜÊÇ¿ÕµÄ*/
-		{
-			next->prev=NULL;
-			q->head=next;
-			q->level-=1;
-		}else
-		{
-			LOGD("after pop ,next is NULL");
-			/*¼ì²épopºóÊÇ²»ÊÇ¿ÕÁË*/
-			if(q->level==0){
-				LOGD("AT THIS TIME ,level SHOULD BE  0");
-			}
-			q->head=q->tail=NULL;
-			/*Á©¿ÕÖ¸ÕëÔõÃ´»áÓĞprevºÍnextÄØ£¬¶øÇÒËûÃÇ¶¼Ã»·ÖÅä¿Õ¼äµÄ£¬ËùÒÔ²»ÄÜ¸ø¸÷¸öÓòÃû¸³ÖµµÄ*/
-			//q->head->prev=NULL;
-			//q->head->next=NULL;
-
-	    }
-		#else
 		q->level-=1;
-
 		if(q->level ==0 ){
 			q->head=q->tail=NULL;
-			//return 0;
 			goto DONE;
 		}
 		q->head=q->head->next;
-		q->head->prev=NULL;
-		#endif
+
 DONE:
 	sc_unlock(&q->mutex);
 	  return 0;
 	}else{
-		LOGE("Q IS NULL ,pop front queue fail");
+		LOGE("Q IS NULL ,pop  fail");
 		sc_unlock(&q->mutex);
 		return -1;
 	}

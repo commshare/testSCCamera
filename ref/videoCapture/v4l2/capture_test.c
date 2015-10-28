@@ -1,8 +1,6 @@
 #include"capture.h"
 #include"pthread.h"
-typedef struct camera_s{
- int fd;
-}camera_t;
+
 
 //void mainloop(int fd)
 void *thread_mainloop(void * camera)
@@ -41,7 +39,7 @@ void *thread_mainloop(void * camera)
                                 exit (EXIT_FAILURE);
                         }
 
-			if (capture_read_frame ())
+			if (capture_read_frame (cam))
                     		break;
 
 			/* EAGAIN - continue select loop. */
@@ -63,8 +61,9 @@ int main()
 	camera_t *cam=malloc(sizeof(camera_t));
 	cam->fd=fd;
     pthread_t cam_pid;
-
-
+    sc_queue_t *q=queue_new(30);
+	if(q)
+		cam->q=q;
   // mainloop(fd);
   pthread_create(&cam_pid,NULL,thread_mainloop,cam);
  //capture_stop();

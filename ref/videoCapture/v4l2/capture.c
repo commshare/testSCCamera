@@ -77,7 +77,7 @@ process_image                   (const void *           p)
 }
 
 int
-capture_read_frame			(void)
+capture_read_frame			(camera_t * camera)
 {
         struct v4l2_buffer buf;
 	unsigned int i;
@@ -135,7 +135,7 @@ capture_read_frame			(void)
     		process_image (buffers[0].start);
 		   #else
 		   //process_image(buffers[buf.index].start, buf.bytesused);
-		     sc_process_image(buffers[buf.index].start, buf.bytesused,CMD_OUT_FILE);
+		     sc_process_image(buffers[buf.index].start, buf.bytesused,CMD_OUT_BUF,camera);
 		   #endif
 
 		if (-1 == xioctl (fd, VIDIOC_QBUF, &buf))

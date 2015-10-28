@@ -10,7 +10,7 @@
 #define sc_pkt sc_frame_t
 
 typedef struct sc_entry_s{
-	struct sc_entry_s *prev;
+//	struct sc_entry_s *prev;
 	struct sc_entry_s *next;
 	sc_pkt *pkt;
 }sc_entry_t;
