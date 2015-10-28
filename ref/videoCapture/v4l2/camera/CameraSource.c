@@ -51,7 +51,7 @@ static void* CameraThread(void* pThreadData) {
 	int result;
 	int state = 1;
 
-#if 0
+#if 1
 	AWCameraDevice* camera_dev = (AWCameraDevice *)(pThreadData);
 	AWCameraContext* CameraCtx = NULL;
 	int err = 0;
@@ -66,7 +66,7 @@ static void* CameraThread(void* pThreadData) {
 
 	while(1) {
          slogi("1111111");
-		 #if 0
+		 #if 1
 		state  = get_state(CameraCtx);
 		if(state == 0) {
             SLOGD("EXIT");

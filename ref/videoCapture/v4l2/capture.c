@@ -21,7 +21,7 @@
  */
 
 #include"capture.h"
-
+#include"sc_process_image.h"
 #define CLEAR(x) memset (&(x), 0, sizeof (x))
 
 typedef enum {
@@ -64,6 +64,7 @@ xioctl                          (int                    fd,
         return r;
 }
 
+
 static void
 process_image                   (const void *           p)
 {
@@ -100,6 +101,8 @@ capture_read_frame			(void)
 
     		process_image (buffers[0].start);
 
+
+
 		break;
 
 	case IO_METHOD_MMAP:
@@ -128,7 +131,12 @@ capture_read_frame			(void)
 
                 assert (buf.index < n_buffers);
 
-	        process_image (buffers[buf.index].start);
+	       #if 0
+    		process_image (buffers[0].start);
+		   #else
+		   //process_image(buffers[buf.index].start, buf.bytesused);
+		     sc_process_image(buffers[buf.index].start, buf.bytesused,CMD_OUT_FILE);
+		   #endif
 
 		if (-1 == xioctl (fd, VIDIOC_QBUF, &buf))
 			errno_exit ("VIDIOC_QBUF");

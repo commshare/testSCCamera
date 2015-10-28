@@ -5,7 +5,7 @@ typedef struct camera_s{
 }camera_t;
 
 //void mainloop(int fd)
-void *mainloop(void * camera)
+void *thread_mainloop(void * camera)
 {
 	 camera_t *cam=(camera_t *)camera;
 	 capture_start();
@@ -66,7 +66,7 @@ int main()
 
 
   // mainloop(fd);
-  pthread_create(&cam_pid,NULL,mainloop,cam);
+  pthread_create(&cam_pid,NULL,thread_mainloop,cam);
  //capture_stop();
 
 	//printf("#IN##Mainloop BEGIN ######\n");

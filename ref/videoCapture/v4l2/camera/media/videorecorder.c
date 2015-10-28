@@ -208,7 +208,8 @@ int start_video_recorder(Video_Recorder* recorder)
 	SLOGD("END");
 	return 1;
 }
-
+//void sc_wait_camera_thread(Video_Recorder* recorder){
+//	}
 static void* recorder_newthread_worker(void* cookie)
 {
 	start_video_recorder((Video_Recorder*) cookie);
@@ -219,7 +220,29 @@ void start_video_recorder_newthread(Video_Recorder* recorder)
 {
 	pthread_create(&recorder->thread_recorder, NULL, recorder_newthread_worker, recorder);
 }
+int sc_stop_video_recorder(Video_Recorder* recorder){
+if (!recorder)
+		return 0;
 
+	recorder->mstart = 0;
+	recorder->cameraDevice->stopCamera(recorder->cameraDevice);
+
+	DestroyCamera(recorder->cameraDevice);
+	recorder->cameraDevice = NULL;
+
+	//waterMark_exit(recorder->waterMark);
+	//free(recorder->waterMark);
+	//recorder->waterMark = NULL;
+
+	//recorder->venc_device->ioctrl(recorder->venc_device, VENC_CMD_CLOSE, 0);
+	//cedarvEncExit(recorder->venc_device);
+	//recorder->venc_device = NULL;
+
+//	cedarx_hardware_exit(0);
+
+	return 1;
+
+}
 int stop_video_recorder(Video_Recorder* recorder)
 {
 	if (!recorder)

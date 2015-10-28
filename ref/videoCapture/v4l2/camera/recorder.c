@@ -52,6 +52,7 @@ int main(int argc, char **argv)
 	signal(SIGINT, sigroutine);
 	signal(SIGQUIT, sigroutine);
 	testCamera();
+	sc_stop_video_recorder(recorder);
 	SLOGD("END OF MAIN");
 	return 1;
 }

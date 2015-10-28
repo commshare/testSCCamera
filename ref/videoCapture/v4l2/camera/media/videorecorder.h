@@ -79,6 +79,8 @@ int start_video_recorder(Video_Recorder*);
 void start_video_recorder_newthread(Video_Recorder*);
 
 int stop_video_recorder(Video_Recorder*);
+int sc_stop_video_recorder(Video_Recorder* recorder);
+
 
 #ifdef __cplusplus
 }
