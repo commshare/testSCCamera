@@ -78,24 +78,26 @@ int queue_pushback(sc_queue_t * q, sc_pkt * pkt){
     sc_entry_t *entry=NULL;
     entry=(sc_entry_t *)malloc(sizeof(sc_entry_t));
 	memset(entry,0,sizeof(sc_entry_t));
+	/*内存如果是在外面分配的话，入队之后，要保证内存不被销毁*/
 	entry->pkt=pkt;
 	if(q->head==NULL){
 		LOGD("first time pushback");
 		/*head和tail一直没分配过内存啊，那么tai的几个域都是没内存的，也就无法赋值和使用*/
-		q->head=q->tail=entry; /*否则tail是NULL，后面会报错*/
+		q->head=entry; /*否则tail是NULL，后面会报错*/
 		/*这是在改变entry的prev和next*/
 		//q->head->next=NULL;
 		//q->head->prev=NULL;
 	}
 	q->tail->next=entry;
-	q->tail->next->prev=q->tail;
+	entry->prev=q->tail;
+	entry->next=NULL;
 	q->tail=entry;
-	q->tail->next=NULL;
 	q->level+=1;
 	sc_unlock(&q->mutex);
 	return 0;
 }
 
+/*pop之后delete内存*/
 int queue_popfront(sc_queue_t * q, sc_pkt **pkt){
 	sc_lock(&q->mutex);
 	if(q!=NULL){
@@ -114,6 +116,7 @@ int queue_popfront(sc_queue_t * q, sc_pkt **pkt){
 		}
 		#endif
 		LOGD("-----1---------");
+		#if 0
 		sc_entry_t *next=q->head->next;
 		if(next)/*取完之后，next可能是空的*/
 		{
@@ -133,6 +136,18 @@ int queue_popfront(sc_queue_t * q, sc_pkt **pkt){
 			//q->head->next=NULL;
 
 	    }
+		#else
+		q->level-=1;
+
+		if(q->level ==0 ){
+			q->head=q->tail=NULL;
+			//return 0;
+			goto DONE;
+		}
+		q->head=q->head->next;
+		q->head->prev=NULL;
+		#endif
+DONE:
 	sc_unlock(&q->mutex);
 	  return 0;
 	}else{

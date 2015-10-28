@@ -62,7 +62,7 @@ camera_t* camera_open(const char * device)
   camera->head.start = NULL;
   camera->context.pointer = NULL;
   camera->context.log = &log_stderr;
-  camera->q=queue_new(20);
+  camera->q=queue_new(30);
   return camera;
 }
 
@@ -104,7 +104,7 @@ static bool camera_buffer_prepare(camera_t* camera)
 {
   struct v4l2_requestbuffers req;
   memset(&req, 0, sizeof req);
-  req.count = 4;
+  req.count = 5;//4;
   req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   req.memory = V4L2_MEMORY_MMAP;
   if (xioctl(camera->fd, VIDIOC_REQBUFS, &req) == -1)
