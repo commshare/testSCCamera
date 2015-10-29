@@ -25,12 +25,13 @@ sc_queue_t *queue_new(int size){
 		q->level=0;
 		q->head=q->tail=NULL;/*¼Ó²»¼Ó¶¼Ò»ÑùµÄ*/
 		sc_lock_init(&q->mutex,NULL);
+        pthread_cond_init(&q->cond,NULL);
 		LOGD("queue new OK");
 	}else
 		LOGD("queue new FAIL");
 	return q;
 }
-void queue_delete(sc_queue_t *q){
+void queue_uninit(sc_queue_t *q){
 	if(q){
 		sc_lock(&q->mutex);
 		//memset(q,0,sizeof(sc_queue_t));
@@ -41,6 +42,13 @@ void queue_delete(sc_queue_t *q){
 		sc_unlock(&q->mutex);
 
 	}
+}
+void queue_destroy(sc_queue_t *q){
+	if(q){
+		queue_uninit(q);
+		sc_lock_destroy(&q->mutex);
+	}
+
 }
 
 int queue_empty(sc_queue_t *q){
@@ -86,7 +94,7 @@ int queue_pushback(sc_queue_t * q, sc_pkt * pkt){
 		q->head=entry; /*·ñÔòtailÊÇNULL£¬ºóÃæ»á±¨´í*/
         goto OK; /*×¢Òâ½âËø°¡*/
 	}
-	//LOGD("push one");
+	slogi("push one");
 	q->tail->next=entry; /*µÚÒ»´Î²åÈëÊ±£¬tail»¹Ã»ÓÐÈÎºÎÖ¸Ïò(±¾ÉíÒ²Î´±»·ÖÅä¹ýÄÚ´æ)£¬´ËÊ±µÄnextÊÇ²»´æÔÚµÄ¡£*/
 	//entry->prev=q->tail;
 OK:
@@ -106,7 +114,7 @@ int queue_popfront(sc_queue_t * q, sc_pkt **pkt){
 		if(queue_empty(q)){
 			slogi("empty popFAIL");
 			sc_unlock(&q->mutex);
-			return  QGNEL_FAIL;//-1;
+			return  QEMPTY_POPFAIL;//-1;
 		}
 		slogi("q level [%d]",q->level);
 		(*pkt)=q->head->pkt; //ÕâÀï×ÜÊÇÓÐÎÊÌâ°¡å

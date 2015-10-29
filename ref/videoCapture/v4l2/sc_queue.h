@@ -21,6 +21,7 @@ typedef struct sc_queue_s{
 	int size;
 	int level;
 	sc_lock_t mutex;
+	pthread_cond_t cond;
 }sc_queue_t;
 
 enum{
@@ -28,6 +29,7 @@ enum{
 	QNULL_FAIL,
 	QGNEL_FAIL,
 	QFULL_PUSHFAIL,
+	QEMPTY_POPFAIL,
 };
 
 int queue_pushback(sc_queue_t * q, sc_pkt * pkt);

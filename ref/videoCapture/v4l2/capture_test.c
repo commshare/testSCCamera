@@ -59,19 +59,28 @@ void *thread_pop(void * camera){
 
 	 slogi("pop ");
 	 while(!cam->stopflag){
+	 	if(count==0){
+	 		sc_lock(&cam->q->mutex);
+			slogi("wait for signal");
+			pthread_cond_wait(&cam->q->cond,&cam->q->mutex);/*等待*/
+			slogi("wake up");
+			sc_unlock(&cam->q->mutex);
+	 	}
 	 	count++;
 	 	int ret=queue_popfront(cam->q,&f);
 		 if(ret==0 && f!=NULL){
-		 	 slogi("pop ok delete it");
+		 	// slogi("pop ok delete it");
 			  if(zbfp)
 			  {
-			  	// yuv_write(f->data, f->len, fp);
-                 sc_write_onebyone(f->data, f->len, count);
+			  	 yuv_write(f->data, f->len, zbfp);
+                // sc_write_onebyone(f->data, f->len, count);
 
+			  }else{
+				slogi("#####zbzb.yuv open fail#####");
 			  }
 			 delete_frame(f);}
-		 if(ret==QGNEL_FAIL){//宁愿popfail，也不能让push数据放不进去而丢帧
-				usleep(200);
+		 if(ret==QEMPTY_POPFAIL || ret==QGNEL_FAIL ){//宁愿popfail，也不能让push数据放不进去而丢帧
+				usleep(300);
 		 }
 	 }
 
@@ -119,7 +128,6 @@ void *thread_mainloop(void * camera)
 			/* EAGAIN - continue select loop. */
                 }
         }
-		capture_stop();
 	//printf("##IN#Mainloop END ######\n");
 }
 
@@ -153,7 +161,10 @@ int main()
   pthread_join (cam_pid, NULL);
   pthread_join (pop_pid, NULL);
   if(zbfp)
-  	close(zbfp);
+  	fclose(zbfp);
+  queue_destroy(cam->q);
+  capture_stop();
+
 return 0;
 
 }
