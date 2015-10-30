@@ -16,6 +16,7 @@ typedef struct sc_timer_s{
     time_t mStartRecordTime;
 	sc_timer_callback callback;
 	int state;
+	void *arg;
 
 }sc_timer_t;
 

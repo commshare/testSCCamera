@@ -53,11 +53,11 @@ void threadFunc(sc_timer_t *t) {
 		   #if 0
 			showCaculator();
 		   #else
-		   	slogi("do do do ");
+		   //	slogi("do do do ");
 		   if(t->callback){
-		   	slogi("do callback");
-		     t->callback("test");
-			 		   	slogi("after do callback");
+		   //	slogi("do callback");
+		     t->callback(t->arg);
+			 //		   	slogi("after do callback");
 
 		   }
 		   #endif
@@ -146,12 +146,13 @@ void createTimerThread(sc_timer_t *t){
         pthread_attr_destroy(&attr);
     }
 }
-int timerNew(sc_timer_t **t,sc_timer_callback callback){
+int timerNew(sc_timer_t **t,sc_timer_callback callback,void *arg){
 	(*t)=malloc(sizeof(sc_timer_t));
 	if(*t){
 		memset(*t,0,sizeof(sc_timer_t));
 		(*t)->callback=callback;
   		  (*t)->interval=30;
+		  (*t)->arg=arg;
 		createTimerThread(*t);
 		return 0;
 	}

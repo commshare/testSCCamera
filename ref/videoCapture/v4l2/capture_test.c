@@ -132,10 +132,11 @@ void *thread_mainloop(void * camera)
         }
 	//printf("##IN#Mainloop END ######\n");
 }
-int timer_callback(void *test)
+int timer_callback(void *camera)
 {
-	char *t=(char *)test;
-	slogi("========callback===[%s]======",t);
+	camera_t *cam=(camera_t *)camera;
+	slogi("========callback=========");
+	cam->stopflag=1;
 	return 0;
 }
 
@@ -161,8 +162,8 @@ int main()
 		cam->q=q;
   // mainloop(fd);
   sc_timer_t *t;
-  timerNew(&t,timer_callback);
-  #if 0
+  timerNew(&t,timer_callback,cam);
+  #if 1
   pthread_create(&cam_pid,NULL,thread_mainloop,cam);
   pthread_create(&pop_pid,NULL,thread_pop,cam);
 
@@ -177,6 +178,7 @@ int main()
   	fclose(zbfp);
   queue_destroy(cam->q);
   capture_stop();
+  t->mStopTimerFlag=1;
   timerDelete(t);
 
 return 0;
