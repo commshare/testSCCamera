@@ -2,6 +2,8 @@
 #include"pthread.h"
 #include<stdio.h>
 #include<unistd.h>
+#include"sc_timer.h"
+
 
 //file write
 int file_write(uint8 *src, int length, FILE *fd)
@@ -130,6 +132,13 @@ void *thread_mainloop(void * camera)
         }
 	//printf("##IN#Mainloop END ######\n");
 }
+int timer_callback(void *test)
+{
+	char *t=(char *)test;
+	slogi("========callback===[%s]======",t);
+	return 0;
+}
+
 
 int main()
 {
@@ -151,6 +160,9 @@ int main()
 	if(q)
 		cam->q=q;
   // mainloop(fd);
+  sc_timer_t *t;
+  timerNew(&t,timer_callback);
+  #if 0
   pthread_create(&cam_pid,NULL,thread_mainloop,cam);
   pthread_create(&pop_pid,NULL,thread_pop,cam);
 
@@ -160,10 +172,12 @@ int main()
 	//ADD BY ME BEGIN
   pthread_join (cam_pid, NULL);
   pthread_join (pop_pid, NULL);
+  #endif
   if(zbfp)
   	fclose(zbfp);
   queue_destroy(cam->q);
   capture_stop();
+  timerDelete(t);
 
 return 0;
 
