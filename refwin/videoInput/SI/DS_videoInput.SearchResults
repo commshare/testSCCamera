@@ -1,0 +1,6 @@
+---- IAMStreamConfig Matches (5 in 2 files) ----
+videoInput.cpp (j:\media\xlive\windows\videoinput\videoinputsrcanddemos\libs\videoinput):	IAMStreamConfig *streamConfTest = NULL;
+videoInput.cpp (j:\media\xlive\windows\videoinput\videoinputsrcanddemos\libs\videoinput):    hr = VD->pCaptureGraph->FindInterface(&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Video, VD->pVideoInputFilter, IID_IAMStreamConfig, (void **)&streamConfTest);
+videoInput.cpp (j:\media\xlive\windows\videoinput\videoinputsrcanddemos\libs\videoinput):	hr = VD->pCaptureGraph->FindInterface(&CAPTURE_MODE, &MEDIATYPE_Video, VD->pVideoInputFilter, IID_IAMStreamConfig, (void **)&VD->streamConf);
+videoInput.h (j:\media\xlive\windows\videoinput\videoinputsrcanddemos\libs\videoinput):struct IAMStreamConfig;
+videoInput.h (j:\media\xlive\windows\videoinput\videoinputsrcanddemos\libs\videoinput):		IAMStreamConfig *streamConf;
