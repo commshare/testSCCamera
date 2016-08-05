@@ -997,7 +997,7 @@ bool videoInput::getPixels(int id, unsigned char * dstBuffer, bool flipRedAndBlu
 			//double paranoia - mutexing with both event and critical section
 			EnterCriticalSection(&VDList[id]->sgCallback->critSection);
 
-			unsigned char * src = VDList[id]->sgCallback->pixels;
+			unsigned char * src = VDList[id]->sgCallback->pixels;/*DS的ISampleGrabberCB*/
 			unsigned char * dst = dstBuffer;
 			int height = VDList[id]->height;
 			int width = VDList[id]->width;
@@ -1131,6 +1131,7 @@ void __cdecl videoInput::basicThread(void * objPtr){
 	return;
 }
 
+/*开了一个线程去做设置对话框*/
 void videoInput::showSettingsWindow(int id){
 
 	if (isDeviceSetup(id)){
@@ -1956,6 +1957,7 @@ int videoInput::start(int deviceID, videoDevice *VD){
 	VD->myID = deviceID;
 	VD->setupStarted = true;
 	CAPTURE_MODE = PIN_CATEGORY_CAPTURE; //Don't worry - it ends up being preview (which is faster)
+	/*强制使用回调的方式? */
 	callbackSetCount = 1;  //make sure callback method is not changed after setup called
 
 	if (verbose)printf("SETUP: Setting up device %i\n", deviceID);
