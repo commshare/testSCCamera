@@ -1128,7 +1128,7 @@ bool videoInput::isFrameNew(int id){
 // ----------------------------------------------------------------------
 
 bool videoInput::isDeviceSetup(int id){
-
+	//printf("isDeviceSetup:id[%d]\n",id);
 	if (id < devicesFound && VDList[id]->readyToCapture)return true;
 	else return false;
 

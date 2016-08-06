@@ -2,6 +2,7 @@
 #include "tictoc.h"
 
 #include<iostream>
+#include"sc_config.h"
 using namespace std;
 
 //The first device we want to open
@@ -26,8 +27,8 @@ triangleApp::triangleApp(){
 
 void triangleApp::init(){
 	tic();  printf("[init @%f]\n", toc(0));
-	int test_w = 800;
-	int test_h = 600;
+	int test_w = 640;
+	int test_h = 480;
 	int test_fps = 25;
 	//uncomment for silent setup
 	//videoInput::setVerbose(false);
@@ -48,7 +49,7 @@ void triangleApp::init(){
 	//we allocate our openGL texture objects
 	//we give them a ma size of 1024 by 1024 pixels
 	IT = new imageTexture(2048, 2048, GL_RGB);
-	IT2 = new imageTexture(2048, 2048, GL_RGB);
+	if(DEV2)IT2 = new imageTexture(2048, 2048, GL_RGB);
 
 	//by default we use a callback method
 	//this updates whenever a new frame
@@ -69,8 +70,11 @@ void triangleApp::init(){
 	//if those sizes are not possible VI will look for the next nearest matching size
 	//VI.setRequestedMediaSubType((int)MEDIASUBTYPE_MJPG);
 	VI.setupDevice(dev, test_w, test_h, VI_COMPOSITE);
-	VI.setupDevice(dev + 1, test_w, test_h, VI_COMPOSITE);
-
+    if(DEV2)	VI.setupDevice(dev + 1, test_w, test_h, VI_COMPOSITE);
+    /*/使用widows的对话框来设置摄像头的格式等。可
+        http://blog.csdn.net/jia_zhengshen/article/details/9980495
+    */
+    VI.showSettingsWindow(dev);//
 	//once the device is setup you can try and
 	//set the format - this is useful if your device
 	//doesn't remember what format you set it to
@@ -79,7 +83,7 @@ void triangleApp::init(){
 	//we allocate our buffer based on the number
 	//of pixels in each frame - this will be width * height * 3
 	frame = new unsigned char[VI.getSize(dev)];
-	frame2 = new unsigned char[VI.getSize(dev + 1)];
+	if(DEV2)frame2 = new unsigned char[VI.getSize(dev + 1)];
 
 }
 int test_count = 0;
@@ -132,6 +136,7 @@ void triangleApp::idle(){
 	}
 	/*这个不要会不会有什么影响啊*/
 	//check to see if we have got a new frame
+	if(DEV2)
 	if (VI.isFrameNew(dev + 1))
 	{
 		//here we are directly return the pixels into our texture
@@ -145,17 +150,17 @@ void triangleApp::draw(){
 
 	setupScreen();
 	IT->renderTexture(0, 0, VI.getWidth(dev), VI.getHeight(dev));
-	IT2->renderTexture(VI.getWidth(dev), 0, VI.getWidth(dev + 1), VI.getHeight(dev + 1));
+	if(DEV2)IT2->renderTexture(VI.getWidth(dev), 0, VI.getWidth(dev + 1), VI.getHeight(dev + 1));
 }
 
 void triangleApp::keyDown(char c){
 
 	//some options hooked up to key commands
 	if (c == 'S')VI.showSettingsWindow(dev);
-	if (c == 'D')VI.showSettingsWindow(dev + 1);
+	if(DEV2)if (c == 'D')VI.showSettingsWindow(dev + 1);
 
 	if (c == 'R')VI.restartDevice(dev);
-	if (c == 'T')VI.restartDevice(dev + 1);
+	if(DEV2)if (c == 'T')VI.restartDevice(dev + 1);
 
 	if (c == '1')VI.setVideoSettingCameraPct(0, VI.propExposure, 0.1, 2);
 	if (c == '2')VI.setVideoSettingCameraPct(0, VI.propExposure, 0.9, 2);
@@ -166,7 +171,7 @@ void triangleApp::keyDown(char c){
 	if (c == 'Q')
 	{
 		VI.stopDevice(dev);
-		VI.stopDevice(dev + 1);
+		if(DEV2)VI.stopDevice(dev + 1);
 	}
 }
 

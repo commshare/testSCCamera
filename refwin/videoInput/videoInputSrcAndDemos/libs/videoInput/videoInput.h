@@ -37,7 +37,7 @@ Thanks to:
 */
 /////////////////////////////////////////////////////////
 
-#pragma comment(lib,"Strmiids.lib") 
+#pragma comment(lib,"Strmiids.lib")
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -118,7 +118,8 @@ Thanks to:
 
 //videoInput defines
 #define VI_VERSION	 0.200
-#define VI_MAX_CAMERAS  20
+/*只使用一个*/
+#define VI_MAX_CAMERAS  1  //20
 #define VI_NUM_TYPES    19 //DON'T TOUCH
 #define VI_NUM_FORMATS  18 //DON'T TOUCH
 
@@ -263,13 +264,13 @@ class videoInput{
 		static void setVerbose(bool _verbose);
 
 		//this allows for multithreaded use of VI ( default is single threaded ).
-		//call this before any videoInput calls. 
-		//note if your app has other COM calls then you should set VIs COM usage to match the other COM mode 
+		//call this before any videoInput calls.
+		//note if your app has other COM calls then you should set VIs COM usage to match the other COM mode
 		static void setComMultiThreaded(bool bMulti);
 
 		//Functions in rough order they should be used.
 		static int listDevices(bool silent = false);
-		static std::vector <std::string> getDeviceList(); 
+		static std::vector <std::string> getDeviceList();
 
 		//needs to be called after listDevices - otherwise returns NULL
 		static const char * getDeviceName(int deviceID);
