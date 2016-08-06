@@ -45,10 +45,21 @@ double get_current_time() {
 CTimer::CTimer() :m_Elapse(0), m_hThread(NULL)
 {
     init_timer();
-    
+    /*
+        http://www.debugease.com/vc/2149406.html
+    */
+    m_hThread = 0;
+
 }
 CTimer::~CTimer()
 {
+    if(m_hThread){
+        printf("timer thread running ,call EndTimer \n");
+        /*should use std::thread
+            https://github.com/forhappy/Cplusplus-Concurrency-In-Practice/blob/master/zh/chapter3-Thread/Introduction-to-Thread.md
+        */
+        EndTimer();
+    }
 }
 void CTimer::addcount(){
     count++;
@@ -60,6 +71,9 @@ void CTimer::StartTimer(unsigned int nElapse)
 }
 void CTimer::EndTimer()
 {
+    /* http://stackoverflow.com/questions/18465681/when-to-call-closehandle
+        The thread object remains in the system until the thread has terminated and all handles to it have been closed through a call to CloseHandle.
+    */
 	CloseHandle(m_hThread);
 }
 DWORD WINAPI CTimer::ThreadFunc(LPVOID pParam)

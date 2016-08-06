@@ -6,6 +6,7 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //THE SOFTWARE.
 #include  <iostream>
+#include "CTimer.h"
 
 #include "videoInput.h"
 #include <tchar.h>
@@ -114,11 +115,19 @@ void MyDeleteMediaType(AM_MEDIA_TYPE *pmt)
 
 //Callback class
 class SampleGrabberCallback : public ISampleGrabberCB{
+private:
+    CTimer *m_timer;
+    int first;
 public:
 
 	//------------------------------------------------
 	SampleGrabberCallback(){
 		InitializeCriticalSection(&critSection);
+        first=1;
+         m_timer= new   CTimer();
+         if(m_timer == NULL ){
+            printf("create m_timer fail \n");
+         }
 		freezeCheck = 0;
 
 
@@ -132,6 +141,9 @@ public:
 
 	//------------------------------------------------
 	~SampleGrabberCallback(){
+	    if(m_timer!=NULL){
+            delete m_timer;
+        }
 		ptrBuffer = NULL;
 		DeleteCriticalSection(&critSection);
 		CloseHandle(hEvent);
@@ -172,6 +184,7 @@ public:
 	//This method is meant to have less overhead /*管理费用*/
 	//------------------------------------------------
 	STDMETHODIMP SampleCB(double Time, IMediaSample *pSample){
+	    /*用WaitForSingleObject()来wait线程是否退出*/
 		if (WaitForSingleObject(hEvent, 0) == WAIT_OBJECT_0) {
             printf("######SampleCB : wait for single object");
             return S_OK;
@@ -183,6 +196,11 @@ public:
 			latestBufferLength = pSample->GetActualDataLength();
 			if (latestBufferLength == numBytes){
 				EnterCriticalSection(&critSection); /*lock*/
+                if(first){
+                    m_timer->StartTimer(1000);
+                    first=0;
+                }
+                m_timer->addcount();
 				memcpy(pixels, ptrBuffer, latestBufferLength);
 				newFrame = true;
 				freezeCheck = 1;
