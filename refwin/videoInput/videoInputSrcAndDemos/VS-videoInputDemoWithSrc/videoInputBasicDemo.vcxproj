@@ -65,7 +65,7 @@
       <AdditionalOptions>/NODEFAULTLIB:"atlthunk"
 /NODEFAULTLIB:"LIBCMT" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;..\libs\DShow\lib\dxguid.lib;..\libs\DShow\lib\ole32.lib;..\libs\DShow\lib\strmiids.lib;..\libs\DShow\lib\uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>

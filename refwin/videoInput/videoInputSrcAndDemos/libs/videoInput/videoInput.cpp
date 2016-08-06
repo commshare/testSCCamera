@@ -169,27 +169,33 @@ public:
 	}
 
 
-	//This method is meant to have less overhead
+	//This method is meant to have less overhead /*管理费用*/
 	//------------------------------------------------
 	STDMETHODIMP SampleCB(double Time, IMediaSample *pSample){
-		if (WaitForSingleObject(hEvent, 0) == WAIT_OBJECT_0) return S_OK;
+		if (WaitForSingleObject(hEvent, 0) == WAIT_OBJECT_0) {
+            printf("######SampleCB : wait for single object");
+            return S_OK;
+		}
 
 		HRESULT hr = pSample->GetPointer(&ptrBuffer);
-
+        // printf("SampleCB : got buffer ok");
 		if (hr == S_OK){
 			latestBufferLength = pSample->GetActualDataLength();
 			if (latestBufferLength == numBytes){
-				EnterCriticalSection(&critSection);
+				EnterCriticalSection(&critSection); /*lock*/
 				memcpy(pixels, ptrBuffer, latestBufferLength);
 				newFrame = true;
 				freezeCheck = 1;
-				LeaveCriticalSection(&critSection);
+				LeaveCriticalSection(&critSection); /*unlock*/
 				SetEvent(hEvent);
 			}
 			else{
 				printf("ERROR: SampleCB() - buffer sizes do not match\n");
 			}
-		}
+		}else
+		{
+                printf("SampleCB : got buffer fail");
+        }
 
 		return S_OK;
 	}
@@ -1993,6 +1999,7 @@ int videoInput::start(int deviceID, videoDevice *VD){
 	//MEDIA CONTROL (START/STOPS STREAM)//
 	// Using QueryInterface on the graph builder,
 	// Get the Media Control object.
+	/*use VD->pControl to control camera pause/stop */
 	hr = VD->pGraph->QueryInterface(IID_IMediaControl, (void **)&VD->pControl);
 	if (FAILED(hr))
 	{
@@ -2244,6 +2251,7 @@ int videoInput::start(int deviceID, videoDevice *VD){
 
 
 	//LETS RUN THE STREAM!
+	/*camera capture run*/
 	hr = VD->pControl->Run();
 
 	if (FAILED(hr)){

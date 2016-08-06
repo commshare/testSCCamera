@@ -7,7 +7,14 @@ using namespace std;
 //The first device we want to open
 int dev = 0;
 
-
+triangleApp::~triangleApp(){
+	if (ctimer){
+        ctimer->EndTimer();
+		delete ctimer;
+	}
+	else
+		printf("CTimer already null\n");
+}
 //empty constructor
 triangleApp::triangleApp(){
 	ctimer = new CTimer();
@@ -81,6 +88,7 @@ int first = 1;
 TicTocTimer      clock = tic();
 double test_time = 0;
 void triangleApp::idle(){
+    /*
 #if 1
 	if (first){
 #if 0
@@ -92,11 +100,13 @@ void triangleApp::idle(){
 		first = 0;
 	}
 #endif
+*/
 	//check to see if we have got a new frame
 	if (VI.isFrameNew(dev))
 	{
+        #if 0
 #if 0
-		printf("got [%d]",test_count++); 
+		printf("got [%d]",test_count++);
 #else /*定时器*/
 #if 0
 		//printf("Elapsed time %f seconds.\n",toc(&clock)); // prints time since last tic()
@@ -113,7 +123,8 @@ void triangleApp::idle(){
 #endif
 
 #endif/*定时器*/
-		//we get the pixels by passing in out buffer which gets filled
+        #endif
+        //we get the pixels by passing in out buffer which gets filled
 		VI.getPixels(dev, frame, true);
 
 		//we then load them into our texture

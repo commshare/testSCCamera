@@ -11,6 +11,7 @@ class triangleApp : public simpleApp{
 
 	public:
 		triangleApp();
+		~triangleApp();
 		virtual void idle();
 		virtual void init();
 		virtual void draw();
