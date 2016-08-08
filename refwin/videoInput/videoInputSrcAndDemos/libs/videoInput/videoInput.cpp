@@ -1600,12 +1600,13 @@ bool videoInput::setup(int deviceNumber){
 		return false;
 	}
 
+
 	if (VDList[deviceNumber]->readyToCapture)
 	{
 		if (verbose)printf("SETUP: can't setup, device %i is currently being used\n", VDList[deviceNumber]->myID);
 		return false;
 	}
-
+    /*start capture*/
 	HRESULT hr = start(deviceNumber, VDList[deviceNumber]);
 	if (hr == S_OK)return true;
 	else return false;

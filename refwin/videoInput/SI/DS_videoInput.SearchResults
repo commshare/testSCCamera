@@ -1,3 +1,74 @@
----- IID_IMediaControl Matches (2 in 2 files) ----
-Control.h (libs\dshow\include):DEFINE_GUID(IID_IMediaControl,0x56a868b1,0x0ad4,0x11ce,0xb0,0x3a,0x00,0x20,0xaf,0x0b,0xa7,0x70);
-videoInput.cpp (libs\videoinput):	hr = VD->pGraph->QueryInterface(IID_IMediaControl, (void **)&VD->pControl);
+---- hEvent Matches (83 in 17 files) ----
+Amfilter.h (libs\dshow\include):    STDMETHODIMP Block(DWORD dwBlockFlags, HANDLE hEvent);
+Amfilter.h (libs\dshow\include):    static HRESULT WaitEvent(HANDLE hEvent);
+Amstream.h (libs\dshow\include):            /* [in] */ HANDLE hEvent,
+Amstream.h (libs\dshow\include):#define IAMMediaTypeSample_Update(This,dwFlags,hEvent,pfnAPC,dwAPCData)	\
+Amstream.h (libs\dshow\include):    (This)->lpVtbl -> Update(This,dwFlags,hEvent,pfnAPC,dwAPCData)
+Austream.h (libs\dshow\include):            /* [in] */ HANDLE hEvent,
+Austream.h (libs\dshow\include):#define IAudioStreamSample_Update(This,dwFlags,hEvent,pfnAPC,dwAPCData)	\
+Austream.h (libs\dshow\include):    (This)->lpVtbl -> Update(This,dwFlags,hEvent,pfnAPC,dwAPCData)
+Control.h (libs\dshow\include):            /* [out] */ OAEVENT *hEvent) = 0;
+Control.h (libs\dshow\include):            /* [out] */ OAEVENT *hEvent);
+Control.h (libs\dshow\include):#define IMediaEvent_GetEventHandle(This,hEvent)	\
+Control.h (libs\dshow\include):    (This)->lpVtbl -> GetEventHandle(This,hEvent)
+Control.h (libs\dshow\include):    /* [out] */ OAEVENT *hEvent);
+Control.h (libs\dshow\include):            /* [out] */ OAEVENT *hEvent);
+Control.h (libs\dshow\include):#define IMediaEventEx_GetEventHandle(This,hEvent)	\
+Control.h (libs\dshow\include):    (This)->lpVtbl -> GetEventHandle(This,hEvent)
+D3drmobj.h (libs\dshow\include):    STDMETHOD(RegisterEvents) (THIS_ HANDLE hEvent, DWORD dwFlags, DWORD dwReserved) PURE;
+D3dx9anim.h (libs\dshow\include):    STDMETHOD(UnkeyEvent)(THIS_ D3DXEVENTHANDLE hEvent) PURE;
+D3dx9anim.h (libs\dshow\include):    STDMETHOD_(D3DXEVENTHANDLE, GetUpcomingTrackEvent)(THIS_ UINT Track, D3DXEVENTHANDLE hEvent) PURE;
+D3dx9anim.h (libs\dshow\include):    STDMETHOD_(D3DXEVENTHANDLE, GetUpcomingPriorityBlend)(THIS_ D3DXEVENTHANDLE hEvent) PURE;
+D3dx9anim.h (libs\dshow\include):    STDMETHOD(ValidateEvent)(THIS_ D3DXEVENTHANDLE hEvent) PURE;
+D3dx9anim.h (libs\dshow\include):    STDMETHOD(GetEventDesc)(THIS_ D3DXEVENTHANDLE hEvent, LPD3DXEVENT_DESC pDesc) PURE;
+Ddstream.h (libs\dshow\include):            /* [in] */ HANDLE hEvent,
+Ddstream.h (libs\dshow\include):#define IDirectDrawStreamSample_Update(This,dwFlags,hEvent,pfnAPC,dwAPCData)	\
+Ddstream.h (libs\dshow\include):    (This)->lpVtbl -> Update(This,dwFlags,hEvent,pfnAPC,dwAPCData)
+Dmusicc.h (libs\dshow\include):    STDMETHOD(SetReadNotificationHandle) (THIS_ HANDLE hEvent) PURE;
+Dmusicc.h (libs\dshow\include):                                               HANDLE hEvent,                   /*  advise via this event */
+Dpnathlp.h (libs\dshow\include):	STDMETHOD(SetAlertEvent)				(THIS_ const HANDLE hEvent, const DWORD dwFlags) PURE;
+Dsound.h (libs\dshow\include):                                           HANDLE hEvent, LPDWORD pdwAdviseCookie) PURE;
+Mmstream.h (libs\dshow\include):            /* [in] */ HANDLE hEvent,
+Mmstream.h (libs\dshow\include):            /* [in] */ HANDLE hEvent,
+Mmstream.h (libs\dshow\include):#define IStreamSample_Update(This,dwFlags,hEvent,pfnAPC,dwAPCData)	\
+Mmstream.h (libs\dshow\include):    (This)->lpVtbl -> Update(This,dwFlags,hEvent,pfnAPC,dwAPCData)
+Mmstream.h (libs\dshow\include):    /* [in] */ HANDLE hEvent,
+Outputq.h (libs\dshow\include):    void SetPopEvent(HANDLE hEvent);
+Refclock.h (libs\dshow\include):        HEVENT hEvent,                  // advise via this event
+Strmif.h (libs\dshow\include):typedef DWORD_PTR HEVENT;
+Strmif.h (libs\dshow\include):            /* [in] */ HEVENT hEvent,
+Strmif.h (libs\dshow\include):            /* [in] */ HEVENT hEvent,
+Strmif.h (libs\dshow\include):#define IReferenceClock_AdviseTime(This,baseTime,streamTime,hEvent,pdwAdviseCookie)	\
+Strmif.h (libs\dshow\include):    (This)->lpVtbl -> AdviseTime(This,baseTime,streamTime,hEvent,pdwAdviseCookie)
+Strmif.h (libs\dshow\include):    /* [in] */ HEVENT hEvent,
+Strmif.h (libs\dshow\include):            /* [in] */ HEVENT hEvent,
+Strmif.h (libs\dshow\include):#define IReferenceClock2_AdviseTime(This,baseTime,streamTime,hEvent,pdwAdviseCookie)	\
+Strmif.h (libs\dshow\include):    (This)->lpVtbl -> AdviseTime(This,baseTime,streamTime,hEvent,pdwAdviseCookie)
+Strmif.h (libs\dshow\include):            /* [in] */ HEVENT hEvent,
+Strmif.h (libs\dshow\include):            /* [in] */ HEVENT hEvent,
+Strmif.h (libs\dshow\include):#define IAMExtDevice_Calibrate(This,hEvent,Mode,pStatus)	\
+Strmif.h (libs\dshow\include):    (This)->lpVtbl -> Calibrate(This,hEvent,Mode,pStatus)
+Strmif.h (libs\dshow\include):    /* [in] */ HEVENT hEvent,
+Strmif.h (libs\dshow\include):            /* [out] */ HEVENT *phEvent) = 0;
+Strmif.h (libs\dshow\include):            /* [in] */ HEVENT hEvent) = 0;
+Strmif.h (libs\dshow\include):            /* [out] */ HEVENT *phEvent);
+Strmif.h (libs\dshow\include):            /* [in] */ HEVENT hEvent);
+Strmif.h (libs\dshow\include):#define IAMExtTransport_SetChase(This,Enable,Offset,hEvent)	\
+Strmif.h (libs\dshow\include):    (This)->lpVtbl -> SetChase(This,Enable,Offset,hEvent)
+Strmif.h (libs\dshow\include):    /* [out] */ HEVENT *phEvent);
+Strmif.h (libs\dshow\include):    /* [in] */ HEVENT hEvent);
+Strmif.h (libs\dshow\include):            /* [in] */ HANDLE hEvent) = 0;
+Strmif.h (libs\dshow\include):            /* [in] */ HANDLE hEvent);
+Strmif.h (libs\dshow\include):#define IPinFlowControl_Block(This,dwBlockFlags,hEvent)	\
+Strmif.h (libs\dshow\include):    (This)->lpVtbl -> Block(This,dwBlockFlags,hEvent)
+Strmif.h (libs\dshow\include):    /* [in] */ HANDLE hEvent);
+Videoctl.h (libs\dshow\include):    STDMETHODIMP WaitForVerticalBlank(DWORD dwFlags,HANDLE hEvent);
+Videoctl.h (libs\dshow\include):    STDMETHODIMP Lock(LPRECT lpDestRect,LPDDSURFACEDESC lpDDSurfaceDesc,DWORD dwFlags,HANDLE hEvent);
+videoInput.cpp (libs\videoinput):		hEvent = CreateEvent(NULL, true, false, NULL);
+videoInput.cpp (libs\videoinput):		CloseHandle(hEvent);
+videoInput.cpp (libs\videoinput):		if (WaitForSingleObject(hEvent, 0) == WAIT_OBJECT_0) {
+videoInput.cpp (libs\videoinput):				SetEvent(hEvent);
+videoInput.cpp (libs\videoinput):	HANDLE hEvent;
+videoInput.cpp (libs\videoinput):			DWORD result = WaitForSingleObject(VDList[id]->sgCallback->hEvent, 1000);
+videoInput.cpp (libs\videoinput):			ResetEvent(VDList[id]->sgCallback->hEvent);
+Wxutil.h (libs\dshow\include):    HANDLE hEvent = NULL);
