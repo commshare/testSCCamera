@@ -13,6 +13,8 @@ class triangleApp : public simpleApp{
 		triangleApp();
 		~triangleApp();
 		virtual void idle();
+		virtual void idle1();
+
 		virtual void init();
 		virtual void draw();
 		virtual void keyDown  (char c);

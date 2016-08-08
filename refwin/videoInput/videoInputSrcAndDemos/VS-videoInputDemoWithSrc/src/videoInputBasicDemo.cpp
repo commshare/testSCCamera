@@ -30,7 +30,7 @@ void GLFWCALL keyfun( int key, int action )
 
 
 
-#if GLFW
+#if 1 //GLFW
 int main( void )
 {
 
@@ -106,7 +106,7 @@ int main( void )
     return 0;
 }
 #else
-#if  1 //TEST_CONSOLE_KEYDOWN /* http://blog.codingnow.com/2006/08/nbstdin.html Windows 下以非阻塞方式读取标准输入  */
+#if  0 //TEST_CONSOLE_KEYDOWN /* http://blog.codingnow.com/2006/08/nbstdin.html Windows 下以非阻塞方式读取标准输入  */
 #include <windows.h>
 #include <process.h>
 #include <stdio.h>
@@ -126,6 +126,12 @@ DWORD WINAPI console_input(LPVOID lpParameter)
 		for (i=0;i<2;i++) {
 			fgets(g_nbstdin_buffer[i],BUFFER_MAX,stdin);
 			SetEvent(g_input[i]);
+            /*
+                参数 dwMilliseconds 为 INFINITE 时函数将直到相应时间事件变成有信号状态才返回，否则就一直等待下去，
+                直到 WaitForSingleObject 有返回直才执行后面的代码。
+
+                BYME:也就是说会导致阻塞啊
+            */
 			WaitForSingleObject(g_process[i],INFINITE);
 		}
 	}
@@ -157,6 +163,9 @@ const char* nbstdin()
 	}
 }
 /*
+在Windows下应该使用“\r\n”提供一次换行
+而在Linux下只需要“\n”就可以了。
+
 http://noding.bokee.com/3867119.html
 所谓回车、换行这些控制符，都是从以前的电传打字机的控制命令继承下来的。回车就是打印头复位，换行就是走纸。Dos/Windows和Unix/Linux对回车、
 换行的理解差别就在于Dos/Windows认为0d=0d0a=0a，而Unix/Linux坚持沿用电传打字机的工作方式（这个其实是比较正确的）。
@@ -178,26 +187,40 @@ string delEnter(const string src) // 过滤掉串中的回车换行符
 void main()
 {
 	create_nbstdin();
-	for (;;) {
+    int running=1;
+	TAPP.init();
+    TAPP.idle1();
+	while (running){
 		const char *line=nbstdin();
+		Sleep(1000);
 		if (line) {
 			printf(">%s",line);
 			string test = delEnter(line);
 			cout << "remove enter :" << test << endl;
             if(strcmp(test.c_str(), "STOP")==0){
                 printf("user input : STOP \n");
+                running=0;
+				getchar();
 			}
 			else
 				printf("[%s]not equal to STOP \n",line);
-				
+
 		}
 		else {
+            /*
+
+当 timeout = 0， 即 Sleep(0)，如果线程调度器的可运行队列中有大于或等于当前线程优先级的就绪线程存在，
+操作系统会将当前线程从处理器上移除，调度其他优先级高的就绪线程运行；
+如果可运行队列中的没有就绪线程或所有就绪线程的优先级均低于当前线程优先级，那么当前线程会继续执行，就像没有调用 Sleep(0)一样。
+            */
 			Sleep(0);
 		}
 	}
 }
 
-#else  /**/
+#else
+   #if 0
+     /**/
     int main(){
     int running=1;
         TAPP.init();
@@ -206,6 +229,70 @@ void main()
         }
     return 0;
 }
+   #else
+   #include <stdio.h>
+
+#include <windows.h>
+
+
+
+/*volatile*/ bool g_bExit = false;
+
+
+
+BOOL CALLBACK CosonleHandler(DWORD ev)
+
+{
+
+    BOOL bRet = FALSE;
+
+    switch (ev)
+
+    {
+
+    case CTRL_CLOSE_EVENT:
+
+        printf("exiting ...\n");
+
+        g_bExit = true;
+
+        bRet = TRUE;
+
+        break;
+
+    default:
+
+        break;
+
+    }
+
+    return bRet;
+
+}
+
+
+
+int main()
+
+{
+
+    SetConsoleCtrlHandler(CosonleHandler, TRUE);
+	TAPP.init();
+  //  TAPP.idle1();
+
+    while(!g_bExit){
+//     printf("1");
+    };
+
+    printf("exit\n");
+
+    system("pause");
+
+
+    return 0;
+
+}
+   #endif
 
 #endif
 #endif

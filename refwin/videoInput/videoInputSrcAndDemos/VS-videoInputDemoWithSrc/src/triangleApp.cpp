@@ -39,8 +39,8 @@ struct capsetting{
 
 void triangleApp::init(){
 	tic();  printf("[init @%f]\n", toc(0));
-    int       test_w = 640;
-    int     test_h= 480;
+    int       test_w = 320;//1280;//640;
+    int     test_h= 240;//720;//480;
     int    test_fps=30;
 	printf("w[%d] h[%d] fps[%d]\n",test_w,test_h,test_fps);
 	//uncomment for silent setup
@@ -104,6 +104,12 @@ int first = 1;
 
 TicTocTimer      clock = tic();
 double test_time = 0;
+void triangleApp::idle1(){
+
+        if (VI.isFrameNew(dev)){
+        cout<<"has a new frame "<<endl;
+    }
+}
 void triangleApp::idle(){
     /*
 #if 1

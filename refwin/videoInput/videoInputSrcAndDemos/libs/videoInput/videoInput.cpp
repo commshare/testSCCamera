@@ -184,11 +184,21 @@ public:
 	//This method is meant to have less overhead /*管理费用*/
 	//------------------------------------------------
 	STDMETHODIMP SampleCB(double Time, IMediaSample *pSample){
-	    /*用WaitForSingleObject()来wait线程是否退出*/
-		if (WaitForSingleObject(hEvent, 0) == WAIT_OBJECT_0) {
-            printf("######SampleCB : wait for single object");
+	#if 1
+	    if(first){
+                   m_timer->StartTimer(1000);
+                   first=0;
+        }
+        m_timer->addcount();
+     #endif
+        DWORD ret=WaitForSingleObject(hEvent, 0);
+		if (ret == WAIT_OBJECT_0 /*  指定的对象出有有信号状态,那么不回调 */) {
+            printf("######SampleCB : wait for  WAIT_OBJECT_0");
             return S_OK;
-		}
+		}else
+		if(ret == WAIT_TIMEOUT){
+           //  printf("######SampleCB : wait for WAIT_TIMEOUT");
+        }
 
 		HRESULT hr = pSample->GetPointer(&ptrBuffer);
         // printf("SampleCB : got buffer ok");
@@ -196,19 +206,26 @@ public:
 			latestBufferLength = pSample->GetActualDataLength();
 			if (latestBufferLength == numBytes){
 				EnterCriticalSection(&critSection); /*lock*/
+                #if 0
                 if(first){
                     m_timer->StartTimer(1000);
                     first=0;
                 }
                 m_timer->addcount();
+                #endif
 				memcpy(pixels, ptrBuffer, latestBufferLength);
 				newFrame = true;
 				freezeCheck = 1;
 				LeaveCriticalSection(&critSection); /*unlock*/
+                /*
+                设置事件的状态为有标记。如果事件创建时是手工的，此事件将保持有标记直到调用ResetEvent。
+                如果事件是自动的，此事件将保持有标记，直到一个线程被释放，系统将设置事件的状态为无标记。
+                */
 				SetEvent(hEvent);
 			}
 			else{
-				printf("ERROR: SampleCB() - buffer sizes do not match\n");
+                /*MEDIASUBTYPE_YUY2和RGB的大小不一样*/
+				//printf("ERROR: SampleCB() - buffer sizes do not match\n");
 			}
 		}else
 		{
@@ -233,6 +250,9 @@ public:
 	unsigned char * pixels;
 	unsigned char * ptrBuffer;
 	CRITICAL_SECTION critSection;
+    /*
+事件(Event)是WIN32提供的最灵活的线程间同步方式，事件可以处于激发状态(signaled or true)或未激发状态(unsignal or false)。
+    */
 	HANDLE hEvent;
 };
 
@@ -1014,9 +1034,15 @@ bool videoInput::getPixels(int id, unsigned char * dstBuffer, bool flipRedAndBlu
 	if (isDeviceSetup(id)){
 		if (bCallback){
 			//callback capture
-
+            /*
+            用来检测 hHandle事件的信号状态
+            当函数的执行时间超过dwMilliseconds就返回
+            */
 			DWORD result = WaitForSingleObject(VDList[id]->sgCallback->hEvent, 1000);
-			if (result != WAIT_OBJECT_0) return false;
+			if (result != WAIT_OBJECT_0) {
+                /*这表示已经超过了等待时间，还是没有信号吧*/
+                return false;
+			}
 
 			//double paranoia - mutexing with both event and critical section
 			EnterCriticalSection(&VDList[id]->sgCallback->critSection);
@@ -1030,7 +1056,7 @@ bool videoInput::getPixels(int id, unsigned char * dstBuffer, bool flipRedAndBlu
 			VDList[id]->sgCallback->newFrame = false;
 
 			LeaveCriticalSection(&VDList[id]->sgCallback->critSection);
-
+            /*这个函数把指定的事件对象设置为无信号状态。 */
 			ResetEvent(VDList[id]->sgCallback->hEvent);
 
 			success = true;
@@ -2209,7 +2235,7 @@ int videoInput::start(int deviceID, videoDevice *VD){
 	ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE));
 
 	mt.majortype = MEDIATYPE_Video;
-	mt.subtype = MEDIASUBTYPE_RGB24;
+	mt.subtype = MEDIASUBTYPE_YUY2;//MEDIASUBTYPE_RGB24;
 	mt.formattype = FORMAT_VideoInfo;
 
 	//VD->pAmMediaType->subtype = VD->videoType;
