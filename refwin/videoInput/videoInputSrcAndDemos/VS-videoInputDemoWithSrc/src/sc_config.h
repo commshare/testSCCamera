@@ -3,3 +3,5 @@
 #define GLFW 1
 
 #define TEST_CONSOLE_KEYDOWN 1
+
+#define ONLY_CAPTURE 1

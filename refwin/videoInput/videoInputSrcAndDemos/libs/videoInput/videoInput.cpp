@@ -10,6 +10,7 @@
 
 #include "videoInput.h"
 #include <tchar.h>
+#include"sc_config.h"
 
 //Include Directshow stuff here so we don't worry about needing all the h files.
 #include <dshow.h>
@@ -181,6 +182,21 @@ public:
 	}
 
 
+#if ONLY_CAPTURE
+	STDMETHODIMP SampleCB(double Time, IMediaSample *pSample){
+	#if 1
+	    if(first){
+                   m_timer->StartTimer(1000);
+                   first=0;
+        }
+        m_timer->addcount();
+     #endif
+		return S_OK;
+
+    }
+
+#else
+
 	//This method is meant to have less overhead /*管理费用*/
 	//------------------------------------------------
 	STDMETHODIMP SampleCB(double Time, IMediaSample *pSample){
@@ -234,7 +250,7 @@ public:
 
 		return S_OK;
 	}
-
+#endif
 
 	//This method is meant to have more overhead
 	STDMETHODIMP BufferCB(double Time, BYTE *pBuffer, long BufferLen){
@@ -2235,7 +2251,8 @@ int videoInput::start(int deviceID, videoDevice *VD){
 	ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE));
 
 	mt.majortype = MEDIATYPE_Video;
-	mt.subtype = MEDIASUBTYPE_YUY2;//MEDIASUBTYPE_RGB24;
+    /*c920 mjpeg yuv420p brg24*/
+	mt.subtype = MEDIASUBTYPE_YUY2;//MEDIASUBTYPE_MJPG;//MEDIASUBTYPE_I420;//MEDIASUBTYPE_RGB24;//MEDIASUBTYPE_YUY2;//MEDIASUBTYPE_RGB24;
 	mt.formattype = FORMAT_VideoInfo;
 
 	//VD->pAmMediaType->subtype = VD->videoType;
@@ -2270,7 +2287,8 @@ int videoInput::start(int deviceID, videoDevice *VD){
 		return hr;
 	}
 
-	//RENDER STREAM//
+#if 1 /*不加这个图像不采集啊*/
+	//RENDER STREAM //mjpeg会在这里失败
 	//This is where the stream gets put together.
 	hr = VD->pCaptureGraph->RenderStream(&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Video, VD->pVideoInputFilter, VD->pGrabberF, VD->pDestFilter);
 
@@ -2279,7 +2297,7 @@ int videoInput::start(int deviceID, videoDevice *VD){
 		stopDevice(deviceID);
 		return hr;
 	}
-
+#endif
 
 	//EXP - lets try setting the sync source to null - and make it run as fast as possible
 	{
